@@ -13,66 +13,160 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f0f0f0;
             min-height: 100vh;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
             color: #333;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        h1 {
-            text-align: center;
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #999;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-
-        .category-tabs {
+        /* ヘッダー */
+        .header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 60px;
             display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            overflow-x: auto;
-            padding-bottom: 10px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
         }
 
-        .category-tab {
-            padding: 10px 20px;
-            background: #f0f0f0;
-            border: none;
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 8px 15px;
+            background: transparent;
+            border: 1px solid #ddd;
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
             font-size: 14px;
-            color: #666;
+            transition: all 0.3s;
         }
 
-        .category-tab.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .nav-btn:hover {
+            background: #667eea;
             color: white;
-            transform: scale(1.05);
+            border-color: #667eea;
         }
 
-        .recording-section {
-            background: #f8f9fa;
-            border-radius: 15px;
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            flex: 1;
+            margin-top: 60px;
+            margin-bottom: 80px;
             padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* ホーム画面中央コントロール */
+        .home-controls {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .control-section {
+            margin-bottom: 30px;
+        }
+
+        .control-title {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .category-select-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .category-select-btn {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .category-select-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .category-select-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            margin-top: 15px;
+        }
+
+        .alphabet-btn {
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .alphabet-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* 録音セクション */
+        .recording-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
             margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .recording-section.active {
+            display: block;
         }
 
         .input-group {
@@ -86,7 +180,7 @@
             font-size: 14px;
         }
 
-        .input-group input {
+        .input-group input, .input-group select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
@@ -94,10 +188,19 @@
             font-size: 16px;
         }
 
+        .recording-timer {
+            text-align: center;
+            font-size: 32px;
+            color: #ff3838;
+            font-weight: bold;
+            margin: 20px 0;
+            display: none;
+        }
+
         .record-controls {
             display: flex;
             gap: 10px;
-            margin-top: 15px;
+            margin-top: 20px;
         }
 
         .btn {
@@ -117,7 +220,6 @@
 
         .btn-record:hover {
             background: #ff5252;
-            transform: translateY(-2px);
         }
 
         .btn-record.recording {
@@ -136,17 +238,9 @@
             color: white;
         }
 
-        .btn-stop:hover {
-            background: #5a6268;
-        }
-
         .btn-save {
             background: #28a745;
             color: white;
-        }
-
-        .btn-save:hover {
-            background: #218838;
         }
 
         .btn-play-preview {
@@ -154,8 +248,38 @@
             color: white;
         }
 
-        .btn-play-preview:hover {
-            background: #138496;
+        /* 音声リスト */
+        .voice-list-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .voice-list-section.active {
+            display: block;
+        }
+
+        .sort-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sort-btn {
+            padding: 8px 15px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .sort-btn.active {
+            background: #667eea;
+            color: white;
         }
 
         .voice-list {
@@ -164,8 +288,8 @@
         }
 
         .voice-item {
-            background: white;
-            border: 2px solid #f0f0f0;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
             border-radius: 12px;
             padding: 15px;
             display: flex;
@@ -182,7 +306,7 @@
         }
 
         .voice-item.playing {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #667eea;
             color: white;
             border-color: #667eea;
         }
@@ -226,7 +350,6 @@
         }
 
         .btn-icon:hover {
-            background: #764ba2;
             transform: scale(1.1);
         }
 
@@ -234,91 +357,34 @@
             background: #dc3545;
         }
 
-        .btn-delete:hover {
-            background: #c82333;
-        }
-
-        .audio-visualizer {
-            height: 60px;
-            background: #f0f0f0;
-            border-radius: 8px;
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 3px;
-            padding: 0 20px;
-        }
-
-        .visualizer-bar {
-            width: 4px;
-            background: #667eea;
-            border-radius: 2px;
-            transition: height 0.1s;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-
-        .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        .settings-panel {
-            background: #f8f9fa;
+        /* 設定画面 */
+        .settings-section {
+            background: white;
             border-radius: 15px;
-            padding: 20px;
-            margin-top: 25px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        .settings-group {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .settings-group:last-child {
+            border-bottom: none;
         }
 
         .settings-title {
+            font-size: 18px;
             font-weight: 600;
             margin-bottom: 15px;
             color: #333;
-        }
-
-        .slider-group {
-            margin-bottom: 20px;
-        }
-
-        .slider-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .slider {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: #ddd;
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #667eea;
-            cursor: pointer;
-        }
-
-        .slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #667eea;
-            cursor: pointer;
-            border: none;
         }
 
         .toggle-group {
@@ -326,6 +392,11 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 15px;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            color: #666;
         }
 
         .toggle-switch {
@@ -370,39 +441,115 @@
             transform: translateX(24px);
         }
 
-        .recording-timer {
-            text-align: center;
-            font-size: 24px;
-            color: #ff3838;
-            font-weight: bold;
-            margin: 10px 0;
-            display: none;
+        .slider-group {
+            margin-bottom: 20px;
         }
 
-        .export-import-section {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
         }
 
-        .btn-export, .btn-import {
-            padding: 10px 20px;
-            margin-right: 10px;
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .btn-import {
+            padding: 12px 24px;
             background: #6c757d;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
+            width: 100%;
         }
 
-        .btn-export:hover, .btn-import:hover {
+        .btn-import:hover {
             background: #5a6268;
         }
 
+        /* フッター */
+        .footer {
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .footer-btn {
+            flex: 1;
+            height: 100%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: #999;
+        }
+
+        .footer-btn:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .footer-btn.active {
+            color: #667eea;
+        }
+
+        .footer-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .footer-label {
+            font-size: 11px;
+        }
+
+        /* 空の状態 */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        /* トースト通知 */
         .toast {
             position: fixed;
-            bottom: 30px;
+            bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(40, 167, 69, 0.95);
@@ -412,6 +559,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             display: none;
             animation: slideUp 0.3s ease;
+            z-index: 2000;
         }
 
         @keyframes slideUp {
@@ -425,161 +573,211 @@
             }
         }
 
-        .quick-phrase-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #fff3cd;
-            border-radius: 10px;
-            display: none;
-        }
-
-        .quick-phrase-btn {
-            padding: 8px 15px;
-            margin: 5px;
-            background: #ffc107;
-            color: #333;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-
-        .quick-phrase-btn:hover {
-            background: #e0a800;
-            transform: scale(1.05);
-        }
-
-        .playback-speed-control {
-            margin-top: 15px;
-        }
-
-        .speed-options {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .speed-btn {
-            padding: 8px 15px;
-            background: #e0e0e0;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .speed-btn.active {
-            background: #667eea;
+        .big-play-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
+            border: none;
+            font-size: 48px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .big-play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .big-play-btn:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎙️ Voice Assistant</h1>
-        <p class="subtitle">体調が悪い時の音声コミュニケーションサポート</p>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="header-title">🎙️ Voice Assistant</div>
+        <nav class="header-nav">
+            <button class="nav-btn active" data-view="home">ホーム</button>
+            <button class="nav-btn" data-view="record">録音</button>
+            <button class="nav-btn" data-view="list">リスト</button>
+            <button class="nav-btn" data-view="settings">設定</button>
+        </nav>
+    </header>
 
-        <div class="category-tabs">
-            <button class="category-tab active" data-category="health">体調不良</button>
-            <button class="category-tab" data-category="greeting">挨拶</button>
-            <button class="category-tab" data-category="daily">日常会話</button>
-            <button class="category-tab" data-category="request">お願い</button>
-            <button class="category-tab" data-category="emergency">緊急</button>
-            <button class="category-tab" data-category="other">その他</button>
-        </div>
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <div class="container">
+            <!-- ホーム画面 -->
+            <div id="homeView" class="view-section">
+                <div class="home-controls">
+                    <div class="control-section">
+                        <div class="control-title">最近の録音を再生</div>
+                        <button class="big-play-btn" onclick="playLastRecording()">▶️</button>
+                    </div>
 
-        <div class="quick-phrase-section" id="quickPhraseSection">
-            <div style="font-size: 14px; color: #666; margin-bottom: 10px;">💡 よく使うフレーズ（クリックで自動入力）</div>
-            <div id="quickPhrases"></div>
-        </div>
+                    <div class="control-section">
+                        <div class="control-title">カテゴリーから選択</div>
+                        <div class="category-select-grid">
+                            <button class="category-select-btn" onclick="selectCategory('health')">🏥 体調不良</button>
+                            <button class="category-select-btn" onclick="selectCategory('greeting')">👋 挨拶</button>
+                            <button class="category-select-btn" onclick="selectCategory('daily')">💬 日常会話</button>
+                            <button class="category-select-btn" onclick="selectCategory('request')">🙏 お願い</button>
+                            <button class="category-select-btn" onclick="selectCategory('emergency')">🚨 緊急</button>
+                            <button class="category-select-btn" onclick="selectCategory('other')">📝 その他</button>
+                        </div>
+                    </div>
 
-        <div class="recording-section">
-            <div class="input-group">
-                <label for="voice-title">録音タイトル</label>
-                <input type="text" id="voice-title" placeholder="例: お腹が痛い、おはよう、眠たい...">
-            </div>
-
-            <div class="recording-timer" id="recordingTimer">00:00</div>
-
-            <div class="audio-visualizer" id="visualizer" style="display: none;">
-                <div class="visualizer-bar" style="height: 20px;"></div>
-                <div class="visualizer-bar" style="height: 35px;"></div>
-                <div class="visualizer-bar" style="height: 25px;"></div>
-                <div class="visualizer-bar" style="height: 40px;"></div>
-                <div class="visualizer-bar" style="height: 30px;"></div>
-                <div class="visualizer-bar" style="height: 45px;"></div>
-                <div class="visualizer-bar" style="height: 35px;"></div>
-                <div class="visualizer-bar" style="height: 25px;"></div>
-                <div class="visualizer-bar" style="height: 40px;"></div>
-                <div class="visualizer-bar" style="height: 20px;"></div>
-            </div>
-
-            <div class="record-controls">
-                <button class="btn btn-record" id="recordBtn">🎤 録音開始</button>
-                <button class="btn btn-stop" id="stopBtn" style="display: none;">⏹️ 停止</button>
-                <button class="btn btn-play-preview" id="previewBtn" style="display: none;">👂 プレビュー</button>
-                <button class="btn btn-save" id="saveBtn" style="display: none;">💾 保存</button>
-            </div>
-        </div>
-
-        <div class="voice-list" id="voiceList">
-            <div class="empty-state">
-                <div class="empty-state-icon">🎵</div>
-                <p>まだ録音がありません</p>
-                <p style="font-size: 14px; margin-top: 10px;">上の録音ボタンから音声を登録してください</p>
-            </div>
-        </div>
-
-        <div class="settings-panel">
-            <div class="settings-title">⚙️ 音声設定</div>
-            
-            <div class="slider-group">
-                <div class="slider-label">
-                    <span>再生音量</span>
-                    <span id="volumeValue">100%</span>
-                </div>
-                <input type="range" class="slider" id="volumeSlider" min="0" max="100" value="100">
-            </div>
-
-            <div class="playback-speed-control">
-                <div class="slider-label">
-                    <span>再生速度</span>
-                    <span id="speedValue">1.0x</span>
-                </div>
-                <div class="speed-options">
-                    <button class="speed-btn" data-speed="0.5">0.5x</button>
-                    <button class="speed-btn" data-speed="0.75">0.75x</button>
-                    <button class="speed-btn active" data-speed="1">1.0x</button>
-                    <button class="speed-btn" data-speed="1.25">1.25x</button>
-                    <button class="speed-btn" data-speed="1.5">1.5x</button>
+                    <div class="control-section">
+                        <div class="control-title">五十音から検索</div>
+                        <div class="alphabet-grid">
+                            <button class="alphabet-btn" onclick="searchByKana('あ')">あ</button>
+                            <button class="alphabet-btn" onclick="searchByKana('か')">か</button>
+                            <button class="alphabet-btn" onclick="searchByKana('さ')">さ</button>
+                            <button class="alphabet-btn" onclick="searchByKana('た')">た</button>
+                            <button class="alphabet-btn" onclick="searchByKana('な')">な</button>
+                            <button class="alphabet-btn" onclick="searchByKana('は')">は</button>
+                            <button class="alphabet-btn" onclick="searchByKana('ま')">ま</button>
+                            <button class="alphabet-btn" onclick="searchByKana('や')">や</button>
+                            <button class="alphabet-btn" onclick="searchByKana('ら')">ら</button>
+                            <button class="alphabet-btn" onclick="searchByKana('わ')">わ</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="toggle-group">
-                <span style="font-size: 14px; color: #666;">ノイズリダクション</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="noiseReduction" checked>
-                    <span class="toggle-slider"></span>
-                </label>
+            <!-- 録音画面 -->
+            <div id="recordView" class="view-section" style="display: none;">
+                <div class="recording-section active">
+                    <div class="input-group">
+                        <label for="voice-title">録音タイトル</label>
+                        <input type="text" id="voice-title" placeholder="例: お腹が痛い、おはよう、眠たい...">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="voice-category">カテゴリー</label>
+                        <select id="voice-category">
+                            <option value="health">体調不良</option>
+                            <option value="greeting">挨拶</option>
+                            <option value="daily">日常会話</option>
+                            <option value="request">お願い</option>
+                            <option value="emergency">緊急</option>
+                            <option value="other">その他</option>
+                        </select>
+                    </div>
+
+                    <div class="recording-timer" id="recordingTimer">00:00</div>
+
+                    <div class="record-controls">
+                        <button class="btn btn-record" id="recordBtn">🎤 録音開始</button>
+                        <button class="btn btn-stop" id="stopBtn" style="display: none;">⏹️ 停止</button>
+                        <button class="btn btn-play-preview" id="previewBtn" style="display: none;">👂 プレビュー</button>
+                        <button class="btn btn-save" id="saveBtn" style="display: none;">💾 保存</button>
+                    </div>
+                </div>
             </div>
 
-            <div class="toggle-group">
-                <span style="font-size: 14px; color: #666;">エコーキャンセル</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="echoCancellation" checked>
-                    <span class="toggle-slider"></span>
-                </label>
+            <!-- リスト画面 -->
+            <div id="listView" class="view-section" style="display: none;">
+                <div class="voice-list-section active">
+                    <div class="sort-controls">
+                        <button class="sort-btn active" id="sortCategory" onclick="setSortMode('category')">カテゴリー別</button>
+                        <button class="sort-btn" id="sortAlphabet" onclick="setSortMode('alphabet')">五十音順</button>
+                        <button class="sort-btn" id="sortDate" onclick="setSortMode('date')">日付順</button>
+                    </div>
+                    <div class="voice-list" id="voiceList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🎵</div>
+                            <p>まだ録音がありません</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="export-import-section">
-                <button class="btn-export" onclick="exportData()">📥 データをエクスポート</button>
-                <button class="btn-import" onclick="document.getElementById('importFile').click()">📤 データをインポート</button>
-                <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+            <!-- 設定画面 -->
+            <div id="settingsView" class="view-section" style="display: none;">
+                <div class="settings-section active">
+                    <div class="settings-group">
+                        <h3 class="settings-title">⚙️ 表示設定</h3>
+                        <div class="toggle-group">
+                            <span class="toggle-label">デフォルトの並び順</span>
+                            <select id="defaultSortMode" onchange="saveDefaultSortMode()">
+                                <option value="category">カテゴリー別</option>
+                                <option value="alphabet">五十音順</option>
+                                <option value="date">日付順</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3 class="settings-title">🎤 録音設定</h3>
+                        <div class="toggle-group">
+                            <span class="toggle-label">ノイズリダクション</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="noiseReduction" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-group">
+                            <span class="toggle-label">エコーキャンセル</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="echoCancellation" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3 class="settings-title">🔊 音声設定</h3>
+                        <div class="slider-group">
+                            <div class="slider-label">
+                                <span>再生音量</span>
+                                <span id="volumeValue">100%</span>
+                            </div>
+                            <input type="range" class="slider" id="volumeSlider" min="0" max="100" value="100">
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3 class="settings-title">💾 データ管理</h3>
+                        <button class="btn-import" onclick="document.getElementById('importFile').click()">
+                            📤 データをインポート
+                        </button>
+                        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
+    <!-- フッター -->
+    <footer class="footer">
+        <button class="footer-btn active" data-view="home">
+            <span class="footer-icon">🏠</span>
+            <span class="footer-label">ホーム</span>
+        </button>
+        <button class="footer-btn" data-view="record">
+            <span class="footer-icon">🎤</span>
+            <span class="footer-label">録音</span>
+        </button>
+        <button class="footer-btn" data-view="list">
+            <span class="footer-icon">📋</span>
+            <span class="footer-label">リスト</span>
+        </button>
+        <button class="footer-btn" data-view="settings">
+            <span class="footer-icon">⚙️</span>
+            <span class="footer-label">設定</span>
+        </button>
+    </footer>
+
+    <!-- トースト通知 -->
     <div class="toast" id="toast"></div>
 
     <script>
@@ -591,48 +789,433 @@
         let previewAudio = null;
         let recordingStartTime;
         let recordingTimerInterval;
-        let currentPlaybackSpeed = 1.0;
+        let currentSortMode = localStorage.getItem('defaultSortMode') || 'category';
+        let currentView = 'home';
 
-        // カテゴリー別のデフォルトフレーズ
-        const defaultPhrases = {
-            health: ['お腹が痛いです', '頭が痛いです', '熱があります', '体がだるいです', '吐き気がします', '眠れません'],
-            greeting: ['おはようございます', 'こんにちは', 'こんばんは', 'おやすみなさい', 'ただいま', 'いってきます'],
-            daily: ['ありがとう', 'ごめんなさい', 'お願いします', 'わかりました', 'はい', 'いいえ'],
-            request: ['水を持ってきてください', '薬をください', '少し休ませてください', '病院に行きたいです', 'トイレに行きたいです', '助けてください'],
-            emergency: ['救急車を呼んでください', '医者を呼んでください', '急いでください', '助けて', '痛い', '苦しい'],
-            other: []
-        };
+        // 初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDefaultSettings();
+            displayVoices();
+            setupEventListeners();
+        });
 
-        // トースト通知を表示
-        function showToast(message, duration = 3000) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, duration);
+        // イベントリスナーのセットアップ
+        function setupEventListeners() {
+            // ヘッダーナビゲーション
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', () => switchView(btn.dataset.view));
+            });
+
+            // フッターナビゲーション
+            document.querySelectorAll('.footer-btn').forEach(btn => {
+                btn.addEventListener('click', () => switchView(btn.dataset.view));
+            });
+
+            // 録音コントロール
+            document.getElementById('recordBtn').addEventListener('click', startRecording);
+            document.getElementById('stopBtn').addEventListener('click', stopRecording);
+            document.getElementById('previewBtn').addEventListener('click', playPreview);
+            document.getElementById('saveBtn').addEventListener('click', () => saveRecording());
+
+            // 音量スライダー
+            document.getElementById('volumeSlider').addEventListener('input', updateVolume);
         }
 
-        // クイックフレーズの表示
-        function displayQuickPhrases() {
-            const quickPhraseSection = document.getElementById('quickPhraseSection');
-            const quickPhrasesDiv = document.getElementById('quickPhrases');
-            const phrases = defaultPhrases[currentCategory];
+        // ビューの切り替え
+        function switchView(view) {
+            currentView = view;
+            
+            // すべてのビューを非表示
+            document.querySelectorAll('.view-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // 選択されたビューを表示
+            document.getElementById(view + 'View').style.display = 'block';
+            
+            // ナビゲーションボタンのアクティブ状態を更新
+            document.querySelectorAll('.nav-btn, .footer-btn').forEach(btn => {
+                if (btn.dataset.view === view) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
 
-            if (phrases && phrases.length > 0) {
-                quickPhraseSection.style.display = 'block';
-                quickPhrasesDiv.innerHTML = phrases.map(phrase => 
-                    `<button class="quick-phrase-btn" onclick="setQuickPhrase('${phrase}')">${phrase}</button>`
-                ).join('');
-            } else {
-                quickPhraseSection.style.display = 'none';
+            // リスト表示の場合は音声リストを更新
+            if (view === 'list') {
+                displayVoices();
             }
         }
 
-        // クイックフレーズを入力欄に設定
-        function setQuickPhrase(phrase) {
-            document.getElementById('voice-title').value = phrase;
-            showToast('フレーズを入力しました');
+        // カテゴリー選択
+        function selectCategory(category) {
+            currentCategory = category;
+            switchView('list');
+            displayVoices();
+        }
+
+        // 五十音検索
+        function searchByKana(kana) {
+            switchView('list');
+            setSortMode('alphabet');
+            displayVoicesByKana(kana);
+        }
+
+        // ソートモードの設定
+        function setSortMode(mode) {
+            currentSortMode = mode;
+            
+            // ボタンのアクティブ状態を更新
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (mode === 'category') {
+                document.getElementById('sortCategory').classList.add('active');
+            } else if (mode === 'alphabet') {
+                document.getElementById('sortAlphabet').classList.add('active');
+            } else if (mode === 'date') {
+                document.getElementById('sortDate').classList.add('active');
+            }
+            
+            displayVoices();
+        }
+
+        // 音声リストの表示
+        function displayVoices() {
+            const voiceList = document.getElementById('voiceList');
+            const voices = loadVoices();
+            let allVoices = [];
+
+            // すべてのカテゴリーから音声を集める
+            Object.keys(voices).forEach(category => {
+                (voices[category] || []).forEach(voice => {
+                    allVoices.push({ ...voice, category });
+                });
+            });
+
+            if (allVoices.length === 0) {
+                voiceList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🎵</div>
+                        <p>まだ録音がありません</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // ソート処理
+            if (currentSortMode === 'alphabet') {
+                allVoices.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
+            } else if (currentSortMode === 'date') {
+                allVoices.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            } else if (currentSortMode === 'category') {
+                // カテゴリー別にグループ化して表示
+                const categoryOrder = ['health', 'greeting', 'daily', 'request', 'emergency', 'other'];
+                allVoices.sort((a, b) => {
+                    const aIndex = categoryOrder.indexOf(a.category);
+                    const bIndex = categoryOrder.indexOf(b.category);
+                    if (aIndex !== bIndex) return aIndex - bIndex;
+                    return a.title.localeCompare(b.title, 'ja');
+                });
+            }
+
+            // HTML生成
+            voiceList.innerHTML = allVoices.map((voice, index) => `
+                <div class="voice-item" data-index="${index}" data-category="${voice.category}">
+                    <div class="voice-info">
+                        <div class="voice-title">${voice.title}</div>
+                        <div class="voice-meta">
+                            ${getCategoryLabel(voice.category)} | ${new Date(voice.timestamp).toLocaleString()}
+                            ${voice.duration ? ` | ${voice.duration}秒` : ''}
+                        </div>
+                    </div>
+                    <div class="voice-actions">
+                        <button class="btn-icon" onclick="playVoiceFromList('${voice.category}', '${voice.title}')">▶️</button>
+                        <button class="btn-icon btn-delete" onclick="deleteVoice('${voice.category}', '${voice.title}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 五十音で音声を表示
+        function displayVoicesByKana(kana) {
+            const voiceList = document.getElementById('voiceList');
+            const voices = loadVoices();
+            let filteredVoices = [];
+
+            Object.keys(voices).forEach(category => {
+                (voices[category] || []).forEach(voice => {
+                    const firstChar = voice.title.charAt(0);
+                    if (isKanaInGroup(firstChar, kana)) {
+                        filteredVoices.push({ ...voice, category });
+                    }
+                });
+            });
+
+            if (filteredVoices.length === 0) {
+                voiceList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <p>「${kana}」行の録音はありません</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredVoices.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
+
+            voiceList.innerHTML = filteredVoices.map((voice) => `
+                <div class="voice-item" data-category="${voice.category}">
+                    <div class="voice-info">
+                        <div class="voice-title">${voice.title}</div>
+                        <div class="voice-meta">
+                            ${getCategoryLabel(voice.category)} | ${new Date(voice.timestamp).toLocaleString()}
+                        </div>
+                    </div>
+                    <div class="voice-actions">
+                        <button class="btn-icon" onclick="playVoiceFromList('${voice.category}', '${voice.title}')">▶️</button>
+                        <button class="btn-icon btn-delete" onclick="deleteVoice('${voice.category}', '${voice.title}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // かな文字のグループ判定
+        function isKanaInGroup(char, group) {
+            const kanaGroups = {
+                'あ': ['あ', 'い', 'う', 'え', 'お', 'ア', 'イ', 'ウ', 'エ', 'オ'],
+                'か': ['か', 'き', 'く', 'け', 'こ', 'が', 'ぎ', 'ぐ', 'げ', 'ご', 'カ', 'キ', 'ク', 'ケ', 'コ', 'ガ', 'ギ', 'グ', 'ゲ', 'ゴ'],
+                'さ': ['さ', 'し', 'す', 'せ', 'そ', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ', 'サ', 'シ', 'ス', 'セ', 'ソ', 'ザ', 'ジ', 'ズ', 'ゼ', 'ゾ'],
+                'た': ['た', 'ち', 'つ', 'て', 'と', 'だ', 'ぢ', 'づ', 'で', 'ど', 'タ', 'チ', 'ツ', 'テ', 'ト', 'ダ', 'ヂ', 'ヅ', 'デ', 'ド'],
+                'な': ['な', 'に', 'ぬ', 'ね', 'の', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ'],
+                'は': ['は', 'ひ', 'ふ', 'へ', 'ほ', 'ば', 'び', 'ぶ', 'べ', 'ぼ', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ', 'バ', 'ビ', 'ブ', 'ベ', 'ボ', 'パ', 'ピ', 'プ', 'ペ', 'ポ'],
+                'ま': ['ま', 'み', 'む', 'め', 'も', 'マ', 'ミ', 'ム', 'メ', 'モ'],
+                'や': ['や', 'ゆ', 'よ', 'ヤ', 'ユ', 'ヨ'],
+                'ら': ['ら', 'り', 'る', 'れ', 'ろ', 'ラ', 'リ', 'ル', 'レ', 'ロ'],
+                'わ': ['わ', 'を', 'ん', 'ワ', 'ヲ', 'ン']
+            };
+            
+            return kanaGroups[group] && kanaGroups[group].includes(char);
+        }
+
+        // カテゴリーラベルの取得
+        function getCategoryLabel(category) {
+            const labels = {
+                health: '🏥 体調不良',
+                greeting: '👋 挨拶',
+                daily: '💬 日常会話',
+                request: '🙏 お願い',
+                emergency: '🚨 緊急',
+                other: '📝 その他'
+            };
+            return labels[category] || category;
+        }
+
+        // 最後の録音を再生
+        function playLastRecording() {
+            const voices = loadVoices();
+            let lastVoice = null;
+            let lastCategory = null;
+            let lastTimestamp = null;
+
+            Object.keys(voices).forEach(category => {
+                (voices[category] || []).forEach(voice => {
+                    if (!lastTimestamp || new Date(voice.timestamp) > new Date(lastTimestamp)) {
+                        lastVoice = voice;
+                        lastCategory = category;
+                        lastTimestamp = voice.timestamp;
+                    }
+                });
+            });
+
+            if (lastVoice) {
+                playVoiceFromList(lastCategory, lastVoice.title);
+            } else {
+                showToast('録音がありません');
+            }
+        }
+
+        // リストから音声を再生
+        function playVoiceFromList(category, title) {
+            const voices = loadVoices();
+            const categoryVoices = voices[category] || [];
+            const voice = categoryVoices.find(v => v.title === title);
+
+            if (voice) {
+                if (currentAudio) {
+                    currentAudio.pause();
+                }
+
+                currentAudio = new Audio(voice.data);
+                currentAudio.volume = document.getElementById('volumeSlider').value / 100;
+                currentAudio.play();
+
+                showToast(`再生中: ${voice.title}`);
+            }
+        }
+
+        // 音声の削除
+        function deleteVoice(category, title) {
+            if (confirm('この録音を削除してもよろしいですか？')) {
+                const voices = loadVoices();
+                if (voices[category]) {
+                    voices[category] = voices[category].filter(v => v.title !== title);
+                    saveVoices(voices);
+                    displayVoices();
+                    showToast('録音を削除しました');
+                }
+            }
+        }
+
+        // 録音開始
+        async function startRecording() {
+            try {
+                const constraints = {
+                    audio: {
+                        echoCancellation: document.getElementById('echoCancellation').checked,
+                        noiseSuppression: document.getElementById('noiseReduction').checked,
+                        autoGainControl: true
+                    }
+                };
+
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.start();
+                recordingStartTime = Date.now();
+                document.getElementById('recordingTimer').style.display = 'block';
+                recordingTimerInterval = setInterval(updateRecordingTimer, 100);
+
+                // UI更新
+                document.getElementById('recordBtn').style.display = 'none';
+                document.getElementById('stopBtn').style.display = 'block';
+                document.getElementById('recordBtn').classList.add('recording');
+
+            } catch (error) {
+                showToast('マイクへのアクセスが拒否されました');
+                console.error('Error:', error);
+            }
+        }
+
+        // 録音停止
+        function stopRecording() {
+            if (mediaRecorder) {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                
+                clearInterval(recordingTimerInterval);
+                const recordingDuration = Math.floor((Date.now() - recordingStartTime) / 1000);
+                
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    
+                    previewAudio = new Audio(audioUrl);
+                    previewAudio.volume = document.getElementById('volumeSlider').value / 100;
+                    
+                    // Blobを保存用に準備
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        window.tempRecording = {
+                            data: reader.result,
+                            duration: recordingDuration
+                        };
+                    };
+                    reader.readAsDataURL(audioBlob);
+                    
+                    // UI更新
+                    document.getElementById('stopBtn').style.display = 'none';
+                    document.getElementById('previewBtn').style.display = 'block';
+                    document.getElementById('saveBtn').style.display = 'block';
+                    document.getElementById('recordBtn').classList.remove('recording');
+                };
+            }
+        }
+
+        // プレビュー再生
+        function playPreview() {
+            if (previewAudio) {
+                previewAudio.play();
+                showToast('プレビュー再生中...');
+            }
+        }
+
+        // 録音保存
+        function saveRecording() {
+            const title = document.getElementById('voice-title').value || '無題の録音';
+            const category = document.getElementById('voice-category').value;
+            
+            if (window.tempRecording) {
+                const voices = loadVoices();
+                if (!voices[category]) {
+                    voices[category] = [];
+                }
+                
+                voices[category].push({
+                    title: title,
+                    data: window.tempRecording.data,
+                    timestamp: new Date().toISOString(),
+                    duration: window.tempRecording.duration
+                });
+                
+                saveVoices(voices);
+                
+                // UIリセット
+                document.getElementById('voice-title').value = '';
+                document.getElementById('previewBtn').style.display = 'none';
+                document.getElementById('saveBtn').style.display = 'none';
+                document.getElementById('recordBtn').style.display = 'block';
+                document.getElementById('recordingTimer').style.display = 'none';
+                
+                showToast('✅ 録音を保存しました！');
+                
+                // リスト画面を更新
+                if (currentView === 'list') {
+                    displayVoices();
+                }
+            }
+        }
+
+        // 録音タイマーの更新
+        function updateRecordingTimer() {
+            const now = Date.now();
+            const elapsed = Math.floor((now - recordingStartTime) / 1000);
+            const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            const seconds = (elapsed % 60).toString().padStart(2, '0');
+            document.getElementById('recordingTimer').textContent = `${minutes}:${seconds}`;
+        }
+
+        // 音量更新
+        function updateVolume(e) {
+            document.getElementById('volumeValue').textContent = `${e.target.value}%`;
+            if (currentAudio) {
+                currentAudio.volume = e.target.value / 100;
+            }
+            if (previewAudio) {
+                previewAudio.volume = e.target.value / 100;
+            }
+        }
+
+        // デフォルト設定の読み込み
+        function loadDefaultSettings() {
+            const defaultSortMode = localStorage.getItem('defaultSortMode') || 'category';
+            document.getElementById('defaultSortMode').value = defaultSortMode;
+            currentSortMode = defaultSortMode;
+        }
+
+        // デフォルトソートモードの保存
+        function saveDefaultSortMode() {
+            const mode = document.getElementById('defaultSortMode').value;
+            localStorage.setItem('defaultSortMode', mode);
+            currentSortMode = mode;
+            showToast('設定を保存しました');
         }
 
         // ローカルストレージから音声データを読み込み
@@ -646,277 +1229,6 @@
             localStorage.setItem('voiceAssistant', JSON.stringify(voices));
         }
 
-        // カテゴリータブの切り替え
-        document.querySelectorAll('.category-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                currentCategory = tab.dataset.category;
-                displayVoices();
-                displayQuickPhrases();
-            });
-        });
-
-        // 音声リストの表示
-        function displayVoices() {
-            const voiceList = document.getElementById('voiceList');
-            const voices = loadVoices();
-            const categoryVoices = voices[currentCategory] || [];
-
-            if (categoryVoices.length === 0) {
-                voiceList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🎵</div>
-                        <p>このカテゴリーにはまだ録音がありません</p>
-                        <p style="font-size: 14px; margin-top: 10px;">上の録音ボタンから音声を登録してください</p>
-                    </div>
-                `;
-            } else {
-                voiceList.innerHTML = categoryVoices.map((voice, index) => `
-                    <div class="voice-item" data-index="${index}">
-                        <div class="voice-info">
-                            <div class="voice-title">${voice.title}</div>
-                            <div class="voice-meta">
-                                録音日時: ${new Date(voice.timestamp).toLocaleString()}
-                                ${voice.duration ? ` | 長さ: ${voice.duration}秒` : ''}
-                            </div>
-                        </div>
-                        <div class="voice-actions">
-                            <button class="btn-icon btn-play" onclick="playVoice(${index})">▶️</button>
-                            <button class="btn-icon btn-delete" onclick="deleteVoice(${index})">🗑️</button>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // 録音タイマーの更新
-        function updateRecordingTimer() {
-            const now = Date.now();
-            const elapsed = Math.floor((now - recordingStartTime) / 1000);
-            const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
-            const seconds = (elapsed % 60).toString().padStart(2, '0');
-            document.getElementById('recordingTimer').textContent = `${minutes}:${seconds}`;
-        }
-
-        // ビジュアライザーのアニメーション
-        function animateVisualizer() {
-            const bars = document.querySelectorAll('.visualizer-bar');
-            bars.forEach(bar => {
-                const height = Math.random() * 40 + 10;
-                bar.style.height = `${height}px`;
-            });
-            
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-                requestAnimationFrame(animateVisualizer);
-            }
-        }
-
-        // 録音開始
-        document.getElementById('recordBtn').addEventListener('click', async () => {
-            try {
-                const constraints = {
-                    audio: {
-                        echoCancellation: document.getElementById('echoCancellation').checked,
-                        noiseSuppression: document.getElementById('noiseReduction').checked,
-                        autoGainControl: true,
-                        sampleRate: 44100
-                    }
-                };
-
-                const stream = await navigator.mediaDevices.getUserMedia(constraints);
-                
-                const options = {
-                    mimeType: 'audio/webm;codecs=opus',
-                    audioBitsPerSecond: 128000
-                };
-
-                mediaRecorder = new MediaRecorder(stream, options);
-                audioChunks = [];
-
-                mediaRecorder.ondataavailable = event => {
-                    audioChunks.push(event.data);
-                };
-
-                mediaRecorder.start();
-                
-                // タイマー開始
-                recordingStartTime = Date.now();
-                document.getElementById('recordingTimer').style.display = 'block';
-                recordingTimerInterval = setInterval(updateRecordingTimer, 100);
-                
-                // UI更新
-                document.getElementById('recordBtn').style.display = 'none';
-                document.getElementById('stopBtn').style.display = 'block';
-                document.getElementById('recordBtn').classList.add('recording');
-                document.getElementById('visualizer').style.display = 'flex';
-                
-                animateVisualizer();
-                
-            } catch (error) {
-                alert('マイクへのアクセスが拒否されました。設定を確認してください。');
-                console.error('Error accessing microphone:', error);
-            }
-        });
-
-        // 録音停止
-        document.getElementById('stopBtn').addEventListener('click', () => {
-            if (mediaRecorder) {
-                mediaRecorder.stop();
-                mediaRecorder.stream.getTracks().forEach(track => track.stop());
-                
-                // タイマー停止
-                clearInterval(recordingTimerInterval);
-                const recordingDuration = Math.floor((Date.now() - recordingStartTime) / 1000);
-                
-                mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    
-                    // プレビュー用のオーディオ要素を作成
-                    previewAudio = new Audio(audioUrl);
-                    previewAudio.volume = document.getElementById('volumeSlider').value / 100;
-                    
-                    // UI更新
-                    document.getElementById('stopBtn').style.display = 'none';
-                    document.getElementById('previewBtn').style.display = 'block';
-                    document.getElementById('saveBtn').style.display = 'block';
-                    document.getElementById('recordBtn').classList.remove('recording');
-                    
-                    // 保存処理の準備
-                    document.getElementById('saveBtn').onclick = () => saveRecording(audioBlob, recordingDuration);
-                };
-            }
-        });
-
-        // プレビュー再生
-        document.getElementById('previewBtn').addEventListener('click', () => {
-            if (previewAudio) {
-                previewAudio.playbackRate = currentPlaybackSpeed;
-                previewAudio.play();
-                showToast('プレビュー再生中...');
-            }
-        });
-
-        // 録音を保存
-        function saveRecording(audioBlob, duration) {
-            const title = document.getElementById('voice-title').value || '無題の録音';
-            
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const voices = loadVoices();
-                if (!voices[currentCategory]) {
-                    voices[currentCategory] = [];
-                }
-                
-                voices[currentCategory].push({
-                    title: title,
-                    data: reader.result,
-                    timestamp: new Date().toISOString(),
-                    duration: duration
-                });
-                
-                saveVoices(voices);
-                displayVoices();
-                
-                // UIリセット
-                document.getElementById('voice-title').value = '';
-                document.getElementById('previewBtn').style.display = 'none';
-                document.getElementById('saveBtn').style.display = 'none';
-                document.getElementById('recordBtn').style.display = 'block';
-                document.getElementById('visualizer').style.display = 'none';
-                document.getElementById('recordingTimer').style.display = 'none';
-                
-                showToast('✅ 録音を保存しました！');
-            };
-            
-            reader.readAsDataURL(audioBlob);
-        }
-
-        // 音声再生
-        function playVoice(index) {
-            const voices = loadVoices();
-            const voice = voices[currentCategory][index];
-            
-            if (voice) {
-                // 既存の再生を停止
-                if (currentAudio) {
-                    currentAudio.pause();
-                    document.querySelectorAll('.voice-item').forEach(item => {
-                        item.classList.remove('playing');
-                    });
-                }
-                
-                // 新しい音声を再生
-                currentAudio = new Audio(voice.data);
-                currentAudio.volume = document.getElementById('volumeSlider').value / 100;
-                currentAudio.playbackRate = currentPlaybackSpeed;
-                
-                // 再生中のアイテムをハイライト
-                const voiceItem = document.querySelector(`.voice-item[data-index="${index}"]`);
-                voiceItem.classList.add('playing');
-                
-                currentAudio.play();
-                
-                currentAudio.onended = () => {
-                    voiceItem.classList.remove('playing');
-                    currentAudio = null;
-                };
-            }
-        }
-
-        // 音声削除
-        function deleteVoice(index) {
-            if (confirm('この録音を削除してもよろしいですか？')) {
-                const voices = loadVoices();
-                voices[currentCategory].splice(index, 1);
-                saveVoices(voices);
-                displayVoices();
-                showToast('録音を削除しました');
-            }
-        }
-
-        // 音量スライダー
-        document.getElementById('volumeSlider').addEventListener('input', (e) => {
-            document.getElementById('volumeValue').textContent = `${e.target.value}%`;
-            if (currentAudio) {
-                currentAudio.volume = e.target.value / 100;
-            }
-            if (previewAudio) {
-                previewAudio.volume = e.target.value / 100;
-            }
-        });
-
-        // 再生速度の変更
-        document.querySelectorAll('.speed-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentPlaybackSpeed = parseFloat(btn.dataset.speed);
-                document.getElementById('speedValue').textContent = `${currentPlaybackSpeed}x`;
-                
-                if (currentAudio) {
-                    currentAudio.playbackRate = currentPlaybackSpeed;
-                }
-            });
-        });
-
-        // データのエクスポート
-        function exportData() {
-            const voices = loadVoices();
-            const dataStr = JSON.stringify(voices, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportFileDefaultName = `voice_assistant_backup_${new Date().toISOString().split('T')[0]}.json`;
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-            
-            showToast('データをエクスポートしました');
-        }
-
         // データのインポート
         function importData(event) {
             const file = event.target.files[0];
@@ -926,9 +1238,7 @@
                     try {
                         const importedData = JSON.parse(e.target.result);
                         
-                        if (confirm('既存のデータを上書きしますか？（キャンセルで追加）')) {
-                            saveVoices(importedData);
-                        } else {
+                        if (confirm('既存のデータに追加しますか？（キャンセルで上書き）')) {
                             const currentVoices = loadVoices();
                             for (const category in importedData) {
                                 if (!currentVoices[category]) {
@@ -937,12 +1247,14 @@
                                 currentVoices[category].push(...importedData[category]);
                             }
                             saveVoices(currentVoices);
+                        } else {
+                            saveVoices(importedData);
                         }
                         
                         displayVoices();
                         showToast('データをインポートしました');
                     } catch (error) {
-                        alert('ファイルの読み込みに失敗しました。');
+                        alert('ファイルの読み込みに失敗しました');
                         console.error('Import error:', error);
                     }
                 };
@@ -950,17 +1262,15 @@
             }
         }
 
-        // 初期表示
-        displayVoices();
-        displayQuickPhrases();
-
-        // ページ離脱時の警告
-        window.addEventListener('beforeunload', (e) => {
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-                e.preventDefault();
-                e.returnValue = '録音中です。ページを離れると録音が失われます。';
-            }
-        });
+        // トースト通知を表示
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, duration);
+        }
     </script>
 </body>
 </html>

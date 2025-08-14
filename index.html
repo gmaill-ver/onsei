@@ -29,101 +29,79 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            height: 60px;
+            height: 50px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             padding: 0 20px;
         }
 
         .header-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             color: #333;
-        }
-
-        .header-nav {
-            display: flex;
-            gap: 15px;
-        }
-
-        .nav-btn {
-            padding: 8px 15px;
-            background: transparent;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .nav-btn:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .nav-btn.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
         }
 
         /* メインコンテンツ */
         .main-content {
             flex: 1;
-            margin-top: 60px;
-            margin-bottom: 80px;
-            padding: 20px;
+            margin-top: 50px;
+            margin-bottom: 60px;
+            padding: 10px;
+            overflow: hidden;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
+            height: calc(100vh - 110px);
+            overflow: hidden;
         }
 
         /* ホーム画面中央コントロール */
         .home-controls {
             background: white;
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: 15px;
+            padding: 12px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
-            margin-bottom: 30px;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .control-section {
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
 
         .control-title {
-            font-size: 18px;
+            font-size: 11px;
             color: #666;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
 
         .category-select-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            margin-bottom: 10px;
         }
 
         .category-select-btn {
-            padding: 15px;
+            padding: 8px 5px;
             background: #f8f9fa;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .category-select-btn:hover {
             background: #667eea;
             color: white;
             border-color: #667eea;
-            transform: translateY(-2px);
         }
 
         .category-select-btn.active {
@@ -133,19 +111,21 @@
         }
 
         .alphabet-grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 5px;
-            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-top: 8px;
+            justify-content: center;
         }
 
         .alphabet-btn {
-            padding: 10px;
+            width: calc(18% - 4px);
+            padding: 6px;
             background: #f8f9fa;
             border: 1px solid #ddd;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             transition: all 0.3s;
         }
 
@@ -190,7 +170,7 @@
 
         .recording-timer {
             text-align: center;
-            font-size: 32px;
+            font-size: 28px;
             color: #ff3838;
             font-weight: bold;
             margin: 20px 0;
@@ -526,12 +506,12 @@
         }
 
         .footer-icon {
-            font-size: 24px;
-            margin-bottom: 4px;
+            font-size: 20px;
+            margin-bottom: 2px;
         }
 
         .footer-label {
-            font-size: 11px;
+            font-size: 10px;
         }
 
         /* 空の状態 */
@@ -574,17 +554,17 @@
         }
 
         .big-play-btn {
-            width: 120px;
-            height: 120px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            font-size: 48px;
+            font-size: 32px;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
             transition: all 0.3s;
-            margin: 20px auto;
+            margin: 8px auto;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -592,7 +572,7 @@
 
         .big-play-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
         }
 
         .big-play-btn:active {
@@ -603,35 +583,29 @@
 <body>
     <!-- ヘッダー -->
     <header class="header">
-        <div class="header-title">🎙️ Voice Assistant</div>
-        <nav class="header-nav">
-            <button class="nav-btn active" data-view="home">ホーム</button>
-            <button class="nav-btn" data-view="record">録音</button>
-            <button class="nav-btn" data-view="list">リスト</button>
-            <button class="nav-btn" data-view="settings">設定</button>
-        </nav>
+        <div class="header-title">🎙 Voice Assistant</div>
     </header>
 
     <!-- メインコンテンツ -->
     <main class="main-content">
         <div class="container">
             <!-- ホーム画面 -->
-            <div id="homeView" class="view-section">
+            <div id="homeView" class="view-section" style="height: 100%; overflow: hidden;">
                 <div class="home-controls">
                     <div class="control-section">
                         <div class="control-title">最近の録音を再生</div>
-                        <button class="big-play-btn" onclick="playLastRecording()">▶️</button>
+                        <button class="big-play-btn" onclick="playLastRecording()">▶</button>
                     </div>
 
                     <div class="control-section">
                         <div class="control-title">カテゴリーから選択</div>
                         <div class="category-select-grid">
-                            <button class="category-select-btn" onclick="selectCategory('health')">🏥 体調不良</button>
-                            <button class="category-select-btn" onclick="selectCategory('greeting')">👋 挨拶</button>
-                            <button class="category-select-btn" onclick="selectCategory('daily')">💬 日常会話</button>
-                            <button class="category-select-btn" onclick="selectCategory('request')">🙏 お願い</button>
-                            <button class="category-select-btn" onclick="selectCategory('emergency')">🚨 緊急</button>
-                            <button class="category-select-btn" onclick="selectCategory('other')">📝 その他</button>
+                            <button class="category-select-btn" onclick="selectCategory('health')">体調不良</button>
+                            <button class="category-select-btn" onclick="selectCategory('greeting')">挨拶</button>
+                            <button class="category-select-btn" onclick="selectCategory('daily')">日常会話</button>
+                            <button class="category-select-btn" onclick="selectCategory('request')">お願い</button>
+                            <button class="category-select-btn" onclick="selectCategory('emergency')">緊急</button>
+                            <button class="category-select-btn" onclick="selectCategory('other')">その他</button>
                         </div>
                     </div>
 
@@ -801,11 +775,6 @@
 
         // イベントリスナーのセットアップ
         function setupEventListeners() {
-            // ヘッダーナビゲーション
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', () => switchView(btn.dataset.view));
-            });
-
             // フッターナビゲーション
             document.querySelectorAll('.footer-btn').forEach(btn => {
                 btn.addEventListener('click', () => switchView(btn.dataset.view));
@@ -833,8 +802,8 @@
             // 選択されたビューを表示
             document.getElementById(view + 'View').style.display = 'block';
             
-            // ナビゲーションボタンのアクティブ状態を更新
-            document.querySelectorAll('.nav-btn, .footer-btn').forEach(btn => {
+            // フッターボタンのアクティブ状態を更新
+            document.querySelectorAll('.footer-btn').forEach(btn => {
                 if (btn.dataset.view === view) {
                     btn.classList.add('active');
                 } else {
@@ -1003,12 +972,12 @@
         // カテゴリーラベルの取得
         function getCategoryLabel(category) {
             const labels = {
-                health: '🏥 体調不良',
-                greeting: '👋 挨拶',
-                daily: '💬 日常会話',
-                request: '🙏 お願い',
-                emergency: '🚨 緊急',
-                other: '📝 その他'
+                health: '体調不良',
+                greeting: '挨拶',
+                daily: '日常会話',
+                request: 'お願い',
+                emergency: '緊急',
+                other: 'その他'
             };
             return labels[category] || category;
         }

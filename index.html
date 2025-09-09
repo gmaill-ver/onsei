@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Assistant - 音声アシスタント</title>
+    <title>Voice Assistant - 音声共有システム</title>
+    
     <style>
         * {
             margin: 0;
@@ -20,6 +21,95 @@
             color: #333;
         }
 
+        /* ローディング画面 */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ログイン画面 */
+        .login-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .login-subtitle {
+            color: #999;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 12px 24px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-google:hover {
+            background: #357ae8;
+            transform: translateY(-2px);
+        }
+
+        /* メインアプリ */
+        .app-container {
+            display: none;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
         /* ヘッダー */
         .header {
             background: #fff;
@@ -32,14 +122,40 @@
             height: 50px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 0 20px;
+            justify-content: space-between;
+            padding: 0 15px;
         }
 
         .header-title {
             font-size: 18px;
             font-weight: bold;
             color: #333;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .user-id-display {
+            padding: 4px 8px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            font-size: 10px;
+            color: #666;
+        }
+
+        .btn-logout {
+            padding: 5px 10px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
         }
 
         /* メインコンテンツ */
@@ -58,81 +174,96 @@
             overflow: hidden;
         }
 
-        /* ホーム画面中央コントロール */
+        /* ビューセクション共通 */
+        .view-section {
+            display: none;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* ホーム画面 */
         .home-controls {
             background: white;
             border-radius: 15px;
-            padding: 12px;
+            padding: 20px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            height: 100%;
-            overflow: hidden;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff3838;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
         }
 
-        .control-section {
-            margin-bottom: 10px;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
-        .control-title {
-            font-size: 11px;
-            color: #666;
-            margin-bottom: 8px;
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
         }
 
-        .category-select-grid {
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .quick-actions {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
-            margin-bottom: 10px;
+            gap: 10px;
         }
 
-        .category-select-btn {
-            padding: 8px 5px;
+        .action-btn {
+            padding: 15px;
             background: #f8f9fa;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .action-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .action-label {
             font-size: 12px;
-        }
-
-        .category-select-btn:hover {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .category-select-btn.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .alphabet-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 3px;
-            margin-top: 8px;
-            justify-content: center;
-        }
-
-        .alphabet-btn {
-            width: calc(18% - 4px);
-            padding: 6px;
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-
-        .alphabet-btn:hover {
-            background: #667eea;
-            color: white;
-            transform: scale(1.1);
         }
 
         /* 録音セクション */
@@ -140,13 +271,7 @@
             background: white;
             border-radius: 15px;
             padding: 25px;
-            margin-bottom: 25px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-
-        .recording-section.active {
-            display: block;
         }
 
         .input-group {
@@ -170,7 +295,7 @@
 
         .recording-timer {
             text-align: center;
-            font-size: 28px;
+            font-size: 32px;
             color: #ff3838;
             font-weight: bold;
             margin: 20px 0;
@@ -213,62 +338,14 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 56, 56, 0); }
         }
 
-        .btn-stop {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-save {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-play-preview {
-            background: #17a2b8;
-            color: white;
-        }
-
         /* 音声リスト */
-        .voice-list-section {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-
-        .voice-list-section.active {
-            display: block;
-        }
-
-        .sort-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .sort-btn {
-            padding: 8px 15px;
-            background: #f0f0f0;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .sort-btn.active {
-            background: #667eea;
-            color: white;
-        }
-
         .voice-list {
             display: grid;
             gap: 15px;
         }
 
         .voice-item {
-            background: #f8f9fa;
+            background: white;
             border: 2px solid #e0e0e0;
             border-radius: 12px;
             padding: 15px;
@@ -283,12 +360,6 @@
             border-color: #667eea;
             transform: translateX(5px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-        }
-
-        .voice-item.playing {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
         }
 
         .voice-info {
@@ -306,18 +377,14 @@
             color: #999;
         }
 
-        .voice-item.playing .voice-meta {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
         .voice-actions {
             display: flex;
             gap: 10px;
         }
 
         .btn-icon {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             border: none;
             background: #667eea;
@@ -327,144 +394,234 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 14px;
         }
 
         .btn-icon:hover {
             transform: scale(1.1);
         }
 
+        .btn-share {
+            background: #28a745;
+        }
+
         .btn-delete {
             background: #dc3545;
         }
 
-        /* 設定画面 */
-        .settings-section {
+        /* フレンドセクション */
+        .friends-section {
             background: white;
             border-radius: 15px;
-            padding: 25px;
+            padding: 20px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            display: none;
         }
 
-        .settings-section.active {
-            display: block;
-        }
-
-        .settings-group {
-            margin-bottom: 25px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .settings-group:last-child {
-            border-bottom: none;
-        }
-
-        .settings-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .toggle-group {
+        .add-friend-form {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .toggle-label {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 50px;
-            height: 26px;
-        }
-
-        .toggle-switch input {
-            display: none;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: 0.4s;
-            border-radius: 26px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: 0.4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: #667eea;
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(24px);
-        }
-
-        .slider-group {
+            gap: 10px;
             margin-bottom: 20px;
         }
 
-        .slider-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #666;
+        .add-friend-form input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
         }
 
-        .slider {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: #ddd;
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
+        .btn-add-friend {
+            padding: 10px 20px;
             background: #667eea;
-            cursor: pointer;
-        }
-
-        .btn-import {
-            padding: 12px 24px;
-            background: #6c757d;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
-            width: 100%;
         }
 
-        .btn-import:hover {
-            background: #5a6268;
+        .friend-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .friend-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .friend-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .friend-name {
+            font-weight: 600;
+        }
+
+        .friend-status {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .friend-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* 共有モーダル */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .friend-select-list {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .friend-select-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .friend-select-item:hover {
+            border-color: #667eea;
+        }
+
+        .friend-select-item.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* 受信箱 */
+        .inbox-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .inbox-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .inbox-tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .inbox-tab.active {
+            color: #667eea;
+        }
+
+        .inbox-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .shared-voice-item {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .shared-voice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .sender-info {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .shared-voice-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .shared-voice-message {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
         }
 
         /* フッター */
@@ -494,6 +651,7 @@
             justify-content: center;
             transition: all 0.3s;
             color: #999;
+            position: relative;
         }
 
         .footer-btn:hover {
@@ -514,18 +672,6 @@
             font-size: 10px;
         }
 
-        /* 空の状態 */
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-
-        .empty-state-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
         /* トースト通知 */
         .toast {
             position: fixed;
@@ -542,6 +688,10 @@
             z-index: 2000;
         }
 
+        .toast.error {
+            background: rgba(220, 53, 69, 0.95);
+        }
+
         @keyframes slideUp {
             from {
                 transform: translateX(-50%) translateY(100px);
@@ -553,119 +703,124 @@
             }
         }
 
-        .big-play-btn {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            font-size: 32px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s;
-            margin: 8px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
         }
 
-        .big-play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .big-play-btn:active {
-            transform: scale(0.95);
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
-    <!-- ヘッダー -->
-    <header class="header">
-        <div class="header-title">🎙 Voice Assistant</div>
-    </header>
+    <!-- ローディング画面 -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+    </div>
 
-    <!-- メインコンテンツ -->
-    <main class="main-content">
-        <div class="container">
-            <!-- ホーム画面 -->
-            <div id="homeView" class="view-section" style="height: 100%; overflow: hidden;">
-                <div class="home-controls">
-                    <div class="control-section">
-                        <div class="control-title">最近の録音を再生</div>
-                        <button class="big-play-btn" onclick="playLastRecording()">▶</button>
-                    </div>
+    <!-- ログイン画面 -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <h1 class="login-title">🎙 Voice Assistant</h1>
+            <p class="login-subtitle">音声共有コミュニケーション</p>
+            <button class="btn-google" onclick="signInWithGoogle()">
+                <span>🔑</span>
+                <span>Googleでログイン</span>
+            </button>
+        </div>
+    </div>
 
-                    <div class="control-section">
-                        <div class="control-title">カテゴリーから選択</div>
-                        <div class="category-select-grid">
-                            <button class="category-select-btn" onclick="selectCategory('health')">体調不良</button>
-                            <button class="category-select-btn" onclick="selectCategory('greeting')">挨拶</button>
-                            <button class="category-select-btn" onclick="selectCategory('daily')">日常会話</button>
-                            <button class="category-select-btn" onclick="selectCategory('request')">お願い</button>
-                            <button class="category-select-btn" onclick="selectCategory('emergency')">緊急</button>
-                            <button class="category-select-btn" onclick="selectCategory('other')">その他</button>
+    <!-- メインアプリ -->
+    <div class="app-container" id="appContainer">
+        <!-- ヘッダー -->
+        <header class="header">
+            <div class="header-title">🎙 Voice Assistant</div>
+            <div class="header-user">
+                <span id="userName">Guest</span>
+                <span class="user-id-display" id="userIdDisplay">ID: ----</span>
+                <button class="btn-logout" onclick="signOut()">ログアウト</button>
+            </div>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="main-content">
+            <div class="container">
+                <!-- ホーム画面 -->
+                <div id="homeView" class="view-section active">
+                    <div class="home-controls">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number" id="voiceCount">0</div>
+                                <div class="stat-label">録音数</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="friendCount">0</div>
+                                <div class="stat-label">フレンド</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="sharedCount">0</div>
+                                <div class="stat-label">共有済み</div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="control-section">
-                        <div class="control-title">五十音から検索</div>
-                        <div class="alphabet-grid">
-                            <button class="alphabet-btn" onclick="searchByKana('あ')">あ</button>
-                            <button class="alphabet-btn" onclick="searchByKana('か')">か</button>
-                            <button class="alphabet-btn" onclick="searchByKana('さ')">さ</button>
-                            <button class="alphabet-btn" onclick="searchByKana('た')">た</button>
-                            <button class="alphabet-btn" onclick="searchByKana('な')">な</button>
-                            <button class="alphabet-btn" onclick="searchByKana('は')">は</button>
-                            <button class="alphabet-btn" onclick="searchByKana('ま')">ま</button>
-                            <button class="alphabet-btn" onclick="searchByKana('や')">や</button>
-                            <button class="alphabet-btn" onclick="searchByKana('ら')">ら</button>
-                            <button class="alphabet-btn" onclick="searchByKana('わ')">わ</button>
+                        <div class="quick-actions">
+                            <div class="action-btn" onclick="switchView('record')">
+                                <div class="action-icon">🎤</div>
+                                <div class="action-label">新規録音</div>
+                            </div>
+                            <div class="action-btn" onclick="switchView('list')">
+                                <div class="action-icon">📋</div>
+                                <div class="action-label">録音リスト</div>
+                            </div>
+                            <div class="action-btn" onclick="switchView('inbox')">
+                                <div class="action-icon">📬</div>
+                                <div class="action-label">受信箱</div>
+                                <span class="notification-badge" id="inboxBadge" style="display: none;">0</span>
+                            </div>
+                            <div class="action-btn" onclick="switchView('friends')">
+                                <div class="action-icon">👥</div>
+                                <div class="action-label">フレンド</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- 録音画面 -->
-            <div id="recordView" class="view-section" style="display: none;">
-                <div class="recording-section active">
-                    <div class="input-group">
-                        <label for="voice-title">録音タイトル</label>
-                        <input type="text" id="voice-title" placeholder="例: お腹が痛い、おはよう、眠たい...">
-                    </div>
+                <!-- 録音画面 -->
+                <div id="recordView" class="view-section">
+                    <div class="recording-section">
+                        <div class="input-group">
+                            <label for="voice-title">録音タイトル</label>
+                            <input type="text" id="voice-title" placeholder="例: お腹が痛い、おはよう...">
+                        </div>
 
-                    <div class="input-group">
-                        <label for="voice-category">カテゴリー</label>
-                        <select id="voice-category">
-                            <option value="health">体調不良</option>
-                            <option value="greeting">挨拶</option>
-                            <option value="daily">日常会話</option>
-                            <option value="request">お願い</option>
-                            <option value="emergency">緊急</option>
-                            <option value="other">その他</option>
-                        </select>
-                    </div>
+                        <div class="input-group">
+                            <label for="voice-category">カテゴリー</label>
+                            <select id="voice-category">
+                                <option value="health">体調不良</option>
+                                <option value="greeting">挨拶</option>
+                                <option value="daily">日常会話</option>
+                                <option value="request">お願い</option>
+                                <option value="emergency">緊急</option>
+                                <option value="other">その他</option>
+                            </select>
+                        </div>
 
-                    <div class="recording-timer" id="recordingTimer">00:00</div>
+                        <div class="recording-timer" id="recordingTimer">00:00</div>
 
-                    <div class="record-controls">
-                        <button class="btn btn-record" id="recordBtn">🎤 録音開始</button>
-                        <button class="btn btn-stop" id="stopBtn" style="display: none;">⏹️ 停止</button>
-                        <button class="btn btn-play-preview" id="previewBtn" style="display: none;">👂 プレビュー</button>
-                        <button class="btn btn-save" id="saveBtn" style="display: none;">💾 保存</button>
+                        <div class="record-controls">
+                            <button class="btn btn-record" id="recordBtn">🎤 録音開始</button>
+                            <button class="btn btn-stop" id="stopBtn" style="display: none;">⏹ 停止</button>
+                            <button class="btn btn-play-preview" id="previewBtn" style="display: none;">👂 プレビュー</button>
+                            <button class="btn btn-save" id="saveBtn" style="display: none;">💾 保存</button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- リスト画面 -->
-            <div id="listView" class="view-section" style="display: none;">
-                <div class="voice-list-section active">
-                    <div class="sort-controls">
-                        <button class="sort-btn active" id="sortCategory" onclick="setSortMode('category')">カテゴリー別</button>
-                        <button class="sort-btn" id="sortAlphabet" onclick="setSortMode('alphabet')">五十音順</button>
-                        <button class="sort-btn" id="sortDate" onclick="setSortMode('date')">日付順</button>
-                    </div>
+                <!-- リスト画面 -->
+                <div id="listView" class="view-section">
                     <div class="voice-list" id="voiceList">
                         <div class="empty-state">
                             <div class="empty-state-icon">🎵</div>
@@ -673,378 +828,271 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- 設定画面 -->
-            <div id="settingsView" class="view-section" style="display: none;">
-                <div class="settings-section active">
-                    <div class="settings-group">
-                        <h3 class="settings-title">⚙️ 表示設定</h3>
-                        <div class="toggle-group">
-                            <span class="toggle-label">デフォルトの並び順</span>
-                            <select id="defaultSortMode" onchange="saveDefaultSortMode()">
-                                <option value="category">カテゴリー別</option>
-                                <option value="alphabet">五十音順</option>
-                                <option value="date">日付順</option>
-                            </select>
+                <!-- 受信箱画面 -->
+                <div id="inboxView" class="view-section">
+                    <div class="inbox-section">
+                        <div class="inbox-tabs">
+                            <button class="inbox-tab active" onclick="switchInboxTab('received')">受信した音声</button>
+                            <button class="inbox-tab" onclick="switchInboxTab('sent')">送信した音声</button>
                         </div>
-                    </div>
-
-                    <div class="settings-group">
-                        <h3 class="settings-title">🎤 録音設定</h3>
-                        <div class="toggle-group">
-                            <span class="toggle-label">ノイズリダクション</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="noiseReduction" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-group">
-                            <span class="toggle-label">エコーキャンセル</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="echoCancellation" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="settings-group">
-                        <h3 class="settings-title">🔊 音声設定</h3>
-                        <div class="slider-group">
-                            <div class="slider-label">
-                                <span>再生音量</span>
-                                <span id="volumeValue">100%</span>
+                        <div id="receivedVoices" class="inbox-content">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📭</div>
+                                <p>受信した音声はありません</p>
                             </div>
-                            <input type="range" class="slider" id="volumeSlider" min="0" max="100" value="100">
+                        </div>
+                        <div id="sentVoices" class="inbox-content" style="display: none;">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📤</div>
+                                <p>送信した音声はありません</p>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="settings-group">
-                        <h3 class="settings-title">💾 データ管理</h3>
-                        <button class="btn-import" onclick="document.getElementById('importFile').click()">
-                            📤 データをインポート
-                        </button>
-                        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+                <!-- フレンド画面 -->
+                <div id="friendsView" class="view-section">
+                    <div class="friends-section">
+                        <h3 style="margin-bottom: 15px;">フレンド管理</h3>
+                        
+                        <div class="add-friend-form">
+                            <input type="text" id="friendIdInput" placeholder="フレンドのユーザーIDを入力">
+                            <button class="btn-add-friend" onclick="sendFriendRequest()">追加</button>
+                        </div>
+
+                        <div style="margin-bottom: 20px; padding: 10px; background: #f0f0f0; border-radius: 5px;">
+                            <small>あなたのID: <span id="myUserId" style="font-weight: bold;">----</span></small>
+                            <button onclick="copyMyId()" style="margin-left: 10px; padding: 2px 8px; font-size: 12px;">コピー</button>
+                        </div>
+
+                        <h4 style="margin-bottom: 10px;">フレンドリスト</h4>
+                        <div class="friend-list" id="friendList">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">👥</div>
+                                <p>フレンドがいません</p>
+                            </div>
+                        </div>
+
+                        <h4 style="margin: 20px 0 10px;">フレンドリクエスト</h4>
+                        <div class="friend-list" id="friendRequests">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📮</div>
+                                <p>リクエストはありません</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <!-- フッター -->
-    <footer class="footer">
-        <button class="footer-btn active" data-view="home">
-            <span class="footer-icon">🏠</span>
-            <span class="footer-label">ホーム</span>
-        </button>
-        <button class="footer-btn" data-view="record">
-            <span class="footer-icon">🎤</span>
-            <span class="footer-label">録音</span>
-        </button>
-        <button class="footer-btn" data-view="list">
-            <span class="footer-icon">📋</span>
-            <span class="footer-label">リスト</span>
-        </button>
-        <button class="footer-btn" data-view="settings">
-            <span class="footer-icon">⚙️</span>
-            <span class="footer-label">設定</span>
-        </button>
-    </footer>
+        <!-- フッター -->
+        <footer class="footer">
+            <button class="footer-btn active" data-view="home">
+                <span class="footer-icon">🏠</span>
+                <span class="footer-label">ホーム</span>
+            </button>
+            <button class="footer-btn" data-view="record">
+                <span class="footer-icon">🎤</span>
+                <span class="footer-label">録音</span>
+            </button>
+            <button class="footer-btn" data-view="list">
+                <span class="footer-icon">📋</span>
+                <span class="footer-label">リスト</span>
+            </button>
+            <button class="footer-btn" data-view="inbox">
+                <span class="footer-icon">📬</span>
+                <span class="footer-label">受信箱</span>
+                <span class="notification-badge" id="footerInboxBadge" style="display: none;">0</span>
+            </button>
+            <button class="footer-btn" data-view="friends">
+                <span class="footer-icon">👥</span>
+                <span class="footer-label">フレンド</span>
+                <span class="notification-badge" id="footerFriendBadge" style="display: none;">0</span>
+            </button>
+        </footer>
+    </div>
+
+    <!-- 共有モーダル -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeShareModal()">×</span>
+            <div class="modal-header">音声を共有</div>
+            <div class="input-group">
+                <label>メッセージ（任意）</label>
+                <input type="text" id="shareMessage" placeholder="メッセージを入力...">
+            </div>
+            <div style="margin-bottom: 10px; color: #666; font-size: 14px;">送信先を選択：</div>
+            <div class="friend-select-list" id="friendSelectList">
+                <!-- フレンドリストがここに表示される -->
+            </div>
+            <button class="btn btn-save" onclick="shareVoice()" style="width: 100%; margin-top: 10px;">送信</button>
+        </div>
+    </div>
 
     <!-- トースト通知 -->
     <div class="toast" id="toast"></div>
 
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
     <script>
+        // Firebase設定（実際の設定値を入力してください）
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Firebase初期化
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
         // グローバル変数
+        let currentUser = null;
         let mediaRecorder;
         let audioChunks = [];
-        let currentCategory = 'health';
         let currentAudio = null;
         let previewAudio = null;
         let recordingStartTime;
         let recordingTimerInterval;
-        let currentSortMode = localStorage.getItem('defaultSortMode') || 'category';
         let currentView = 'home';
+        let tempAudioBlob = null;
+        let voicesCache = [];
+        let friendsCache = [];
+        let currentShareVoiceId = null;
+        let unsubscribeFunctions = [];
 
-        // 初期化
-        document.addEventListener('DOMContentLoaded', () => {
-            loadDefaultSettings();
-            displayVoices();
-            setupEventListeners();
+        // 認証状態の監視
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                await initializeUserData();
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'flex';
+                document.getElementById('userName').textContent = user.displayName || 'User';
+                
+                const shortId = user.uid.substring(0, 8);
+                document.getElementById('userIdDisplay').textContent = `ID: ${shortId}`;
+                document.getElementById('myUserId').textContent = shortId;
+                
+                setupRealtimeListeners();
+                loadVoices();
+                loadFriends();
+                loadSharedVoices();
+                updateStats();
+            } else {
+                currentUser = null;
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('appContainer').style.display = 'none';
+                clearRealtimeListeners();
+            }
         });
 
-        // イベントリスナーのセットアップ
-        function setupEventListeners() {
-            // フッターナビゲーション
-            document.querySelectorAll('.footer-btn').forEach(btn => {
-                btn.addEventListener('click', () => switchView(btn.dataset.view));
-            });
-
-            // 録音コントロール
-            document.getElementById('recordBtn').addEventListener('click', startRecording);
-            document.getElementById('stopBtn').addEventListener('click', stopRecording);
-            document.getElementById('previewBtn').addEventListener('click', playPreview);
-            document.getElementById('saveBtn').addEventListener('click', () => saveRecording());
-
-            // 音量スライダー
-            document.getElementById('volumeSlider').addEventListener('input', updateVolume);
-        }
-
-        // ビューの切り替え
-        function switchView(view) {
-            currentView = view;
+        // ユーザーデータの初期化
+        async function initializeUserData() {
+            if (!currentUser) return;
             
-            // すべてのビューを非表示
-            document.querySelectorAll('.view-section').forEach(section => {
-                section.style.display = 'none';
-            });
-            
-            // 選択されたビューを表示
-            document.getElementById(view + 'View').style.display = 'block';
-            
-            // フッターボタンのアクティブ状態を更新
-            document.querySelectorAll('.footer-btn').forEach(btn => {
-                if (btn.dataset.view === view) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-
-            // リスト表示の場合は音声リストを更新
-            if (view === 'list') {
-                displayVoices();
-            }
-        }
-
-        // カテゴリー選択
-        function selectCategory(category) {
-            currentCategory = category;
-            switchView('list');
-            displayVoices();
-        }
-
-        // 五十音検索
-        function searchByKana(kana) {
-            switchView('list');
-            setSortMode('alphabet');
-            displayVoicesByKana(kana);
-        }
-
-        // ソートモードの設定
-        function setSortMode(mode) {
-            currentSortMode = mode;
-            
-            // ボタンのアクティブ状態を更新
-            document.querySelectorAll('.sort-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            if (mode === 'category') {
-                document.getElementById('sortCategory').classList.add('active');
-            } else if (mode === 'alphabet') {
-                document.getElementById('sortAlphabet').classList.add('active');
-            } else if (mode === 'date') {
-                document.getElementById('sortDate').classList.add('active');
-            }
-            
-            displayVoices();
-        }
-
-        // 音声リストの表示
-        function displayVoices() {
-            const voiceList = document.getElementById('voiceList');
-            const voices = loadVoices();
-            let allVoices = [];
-
-            // すべてのカテゴリーから音声を集める
-            Object.keys(voices).forEach(category => {
-                (voices[category] || []).forEach(voice => {
-                    allVoices.push({ ...voice, category });
-                });
-            });
-
-            if (allVoices.length === 0) {
-                voiceList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🎵</div>
-                        <p>まだ録音がありません</p>
-                    </div>
-                `;
-                return;
-            }
-
-            // ソート処理
-            if (currentSortMode === 'alphabet') {
-                allVoices.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
-            } else if (currentSortMode === 'date') {
-                allVoices.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            } else if (currentSortMode === 'category') {
-                // カテゴリー別にグループ化して表示
-                const categoryOrder = ['health', 'greeting', 'daily', 'request', 'emergency', 'other'];
-                allVoices.sort((a, b) => {
-                    const aIndex = categoryOrder.indexOf(a.category);
-                    const bIndex = categoryOrder.indexOf(b.category);
-                    if (aIndex !== bIndex) return aIndex - bIndex;
-                    return a.title.localeCompare(b.title, 'ja');
+            const userDoc = await db.collection('users').doc(currentUser.uid).get();
+            if (!userDoc.exists) {
+                await db.collection('users').doc(currentUser.uid).set({
+                    displayName: currentUser.displayName || 'Anonymous User',
+                    email: currentUser.email || null,
+                    photoURL: currentUser.photoURL || null,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    shortId: currentUser.uid.substring(0, 8)
                 });
             }
-
-            // HTML生成
-            voiceList.innerHTML = allVoices.map((voice, index) => `
-                <div class="voice-item" data-index="${index}" data-category="${voice.category}">
-                    <div class="voice-info">
-                        <div class="voice-title">${voice.title}</div>
-                        <div class="voice-meta">
-                            ${getCategoryLabel(voice.category)} | ${new Date(voice.timestamp).toLocaleString()}
-                            ${voice.duration ? ` | ${voice.duration}秒` : ''}
-                        </div>
-                    </div>
-                    <div class="voice-actions">
-                        <button class="btn-icon" onclick="playVoiceFromList('${voice.category}', '${voice.title}')">▶️</button>
-                        <button class="btn-icon btn-delete" onclick="deleteVoice('${voice.category}', '${voice.title}')">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
         }
 
-        // 五十音で音声を表示
-        function displayVoicesByKana(kana) {
-            const voiceList = document.getElementById('voiceList');
-            const voices = loadVoices();
-            let filteredVoices = [];
+        // リアルタイムリスナーのセットアップ
+        function setupRealtimeListeners() {
+            if (!currentUser) return;
 
-            Object.keys(voices).forEach(category => {
-                (voices[category] || []).forEach(voice => {
-                    const firstChar = voice.title.charAt(0);
-                    if (isKanaInGroup(firstChar, kana)) {
-                        filteredVoices.push({ ...voice, category });
+            // 音声データのリスナー
+            const voicesUnsubscribe = db.collection('users')
+                .doc(currentUser.uid)
+                .collection('voices')
+                .orderBy('timestamp', 'desc')
+                .onSnapshot((snapshot) => {
+                    voicesCache = [];
+                    snapshot.forEach((doc) => {
+                        voicesCache.push({ id: doc.id, ...doc.data() });
+                    });
+                    if (currentView === 'list') {
+                        displayVoices();
                     }
+                    updateStats();
                 });
-            });
+            unsubscribeFunctions.push(voicesUnsubscribe);
 
-            if (filteredVoices.length === 0) {
-                voiceList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🔍</div>
-                        <p>「${kana}」行の録音はありません</p>
-                    </div>
-                `;
-                return;
-            }
-
-            filteredVoices.sort((a, b) => a.title.localeCompare(b.title, 'ja'));
-
-            voiceList.innerHTML = filteredVoices.map((voice) => `
-                <div class="voice-item" data-category="${voice.category}">
-                    <div class="voice-info">
-                        <div class="voice-title">${voice.title}</div>
-                        <div class="voice-meta">
-                            ${getCategoryLabel(voice.category)} | ${new Date(voice.timestamp).toLocaleString()}
-                        </div>
-                    </div>
-                    <div class="voice-actions">
-                        <button class="btn-icon" onclick="playVoiceFromList('${voice.category}', '${voice.title}')">▶️</button>
-                        <button class="btn-icon btn-delete" onclick="deleteVoice('${voice.category}', '${voice.title}')">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // かな文字のグループ判定
-        function isKanaInGroup(char, group) {
-            const kanaGroups = {
-                'あ': ['あ', 'い', 'う', 'え', 'お', 'ア', 'イ', 'ウ', 'エ', 'オ'],
-                'か': ['か', 'き', 'く', 'け', 'こ', 'が', 'ぎ', 'ぐ', 'げ', 'ご', 'カ', 'キ', 'ク', 'ケ', 'コ', 'ガ', 'ギ', 'グ', 'ゲ', 'ゴ'],
-                'さ': ['さ', 'し', 'す', 'せ', 'そ', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ', 'サ', 'シ', 'ス', 'セ', 'ソ', 'ザ', 'ジ', 'ズ', 'ゼ', 'ゾ'],
-                'た': ['た', 'ち', 'つ', 'て', 'と', 'だ', 'ぢ', 'づ', 'で', 'ど', 'タ', 'チ', 'ツ', 'テ', 'ト', 'ダ', 'ヂ', 'ヅ', 'デ', 'ド'],
-                'な': ['な', 'に', 'ぬ', 'ね', 'の', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ'],
-                'は': ['は', 'ひ', 'ふ', 'へ', 'ほ', 'ば', 'び', 'ぶ', 'べ', 'ぼ', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ', 'バ', 'ビ', 'ブ', 'ベ', 'ボ', 'パ', 'ピ', 'プ', 'ペ', 'ポ'],
-                'ま': ['ま', 'み', 'む', 'め', 'も', 'マ', 'ミ', 'ム', 'メ', 'モ'],
-                'や': ['や', 'ゆ', 'よ', 'ヤ', 'ユ', 'ヨ'],
-                'ら': ['ら', 'り', 'る', 'れ', 'ろ', 'ラ', 'リ', 'ル', 'レ', 'ロ'],
-                'わ': ['わ', 'を', 'ん', 'ワ', 'ヲ', 'ン']
-            };
-            
-            return kanaGroups[group] && kanaGroups[group].includes(char);
-        }
-
-        // カテゴリーラベルの取得
-        function getCategoryLabel(category) {
-            const labels = {
-                health: '体調不良',
-                greeting: '挨拶',
-                daily: '日常会話',
-                request: 'お願い',
-                emergency: '緊急',
-                other: 'その他'
-            };
-            return labels[category] || category;
-        }
-
-        // 最後の録音を再生
-        function playLastRecording() {
-            const voices = loadVoices();
-            let lastVoice = null;
-            let lastCategory = null;
-            let lastTimestamp = null;
-
-            Object.keys(voices).forEach(category => {
-                (voices[category] || []).forEach(voice => {
-                    if (!lastTimestamp || new Date(voice.timestamp) > new Date(lastTimestamp)) {
-                        lastVoice = voice;
-                        lastCategory = category;
-                        lastTimestamp = voice.timestamp;
-                    }
+            // フレンドリクエストのリスナー
+            const requestsUnsubscribe = db.collection('friendRequests')
+                .where('toUserId', '==', currentUser.uid)
+                .where('status', '==', 'pending')
+                .onSnapshot((snapshot) => {
+                    displayFriendRequests(snapshot.docs);
+                    const count = snapshot.docs.length;
+                    updateBadge('footerFriendBadge', count);
                 });
-            });
+            unsubscribeFunctions.push(requestsUnsubscribe);
 
-            if (lastVoice) {
-                playVoiceFromList(lastCategory, lastVoice.title);
-            } else {
-                showToast('録音がありません');
+            // 受信した音声のリスナー
+            const sharedUnsubscribe = db.collection('sharedVoices')
+                .where('toUserId', '==', currentUser.uid)
+                .where('isRead', '==', false)
+                .onSnapshot((snapshot) => {
+                    const count = snapshot.docs.length;
+                    updateBadge('inboxBadge', count);
+                    updateBadge('footerInboxBadge', count);
+                });
+            unsubscribeFunctions.push(sharedUnsubscribe);
+        }
+
+        // リスナーのクリア
+        function clearRealtimeListeners() {
+            unsubscribeFunctions.forEach(unsubscribe => unsubscribe());
+            unsubscribeFunctions = [];
+        }
+
+        // Googleログイン
+        async function signInWithGoogle() {
+            try {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                await auth.signInWithPopup(provider);
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast('ログインに失敗しました', true);
             }
         }
 
-        // リストから音声を再生
-        function playVoiceFromList(category, title) {
-            const voices = loadVoices();
-            const categoryVoices = voices[category] || [];
-            const voice = categoryVoices.find(v => v.title === title);
-
-            if (voice) {
-                if (currentAudio) {
-                    currentAudio.pause();
-                }
-
-                currentAudio = new Audio(voice.data);
-                currentAudio.volume = document.getElementById('volumeSlider').value / 100;
-                currentAudio.play();
-
-                showToast(`再生中: ${voice.title}`);
-            }
-        }
-
-        // 音声の削除
-        function deleteVoice(category, title) {
-            if (confirm('この録音を削除してもよろしいですか？')) {
-                const voices = loadVoices();
-                if (voices[category]) {
-                    voices[category] = voices[category].filter(v => v.title !== title);
-                    saveVoices(voices);
-                    displayVoices();
-                    showToast('録音を削除しました');
-                }
+        // ログアウト
+        async function signOut() {
+            try {
+                await auth.signOut();
+            } catch (error) {
+                console.error('Logout error:', error);
+                showToast('ログアウトに失敗しました', true);
             }
         }
 
         // 録音開始
-        async function startRecording() {
+        document.getElementById('recordBtn').addEventListener('click', async () => {
             try {
                 const constraints = {
                     audio: {
-                        echoCancellation: document.getElementById('echoCancellation').checked,
-                        noiseSuppression: document.getElementById('noiseReduction').checked,
+                        echoCancellation: true,
+                        noiseSuppression: true,
                         autoGainControl: true
                     }
                 };
@@ -1062,19 +1110,18 @@
                 document.getElementById('recordingTimer').style.display = 'block';
                 recordingTimerInterval = setInterval(updateRecordingTimer, 100);
 
-                // UI更新
                 document.getElementById('recordBtn').style.display = 'none';
                 document.getElementById('stopBtn').style.display = 'block';
                 document.getElementById('recordBtn').classList.add('recording');
 
             } catch (error) {
-                showToast('マイクへのアクセスが拒否されました');
-                console.error('Error:', error);
+                showToast('マイクへのアクセスが拒否されました', true);
+                console.error('Recording error:', error);
             }
-        }
+        });
 
         // 録音停止
-        function stopRecording() {
+        document.getElementById('stopBtn').addEventListener('click', () => {
             if (mediaRecorder) {
                 mediaRecorder.stop();
                 mediaRecorder.stream.getTracks().forEach(track => track.stop());
@@ -1083,58 +1130,55 @@
                 const recordingDuration = Math.floor((Date.now() - recordingStartTime) / 1000);
                 
                 mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                    const audioUrl = URL.createObjectURL(audioBlob);
+                    tempAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioUrl = URL.createObjectURL(tempAudioBlob);
                     
                     previewAudio = new Audio(audioUrl);
-                    previewAudio.volume = document.getElementById('volumeSlider').value / 100;
+                    window.tempDuration = recordingDuration;
                     
-                    // Blobを保存用に準備
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        window.tempRecording = {
-                            data: reader.result,
-                            duration: recordingDuration
-                        };
-                    };
-                    reader.readAsDataURL(audioBlob);
-                    
-                    // UI更新
                     document.getElementById('stopBtn').style.display = 'none';
                     document.getElementById('previewBtn').style.display = 'block';
                     document.getElementById('saveBtn').style.display = 'block';
                     document.getElementById('recordBtn').classList.remove('recording');
                 };
             }
-        }
+        });
 
         // プレビュー再生
-        function playPreview() {
+        document.getElementById('previewBtn').addEventListener('click', () => {
             if (previewAudio) {
                 previewAudio.play();
                 showToast('プレビュー再生中...');
             }
-        }
+        });
 
         // 録音保存
-        function saveRecording() {
+        document.getElementById('saveBtn').addEventListener('click', async () => {
+            if (!currentUser || !tempAudioBlob) return;
+
             const title = document.getElementById('voice-title').value || '無題の録音';
             const category = document.getElementById('voice-category').value;
             
-            if (window.tempRecording) {
-                const voices = loadVoices();
-                if (!voices[category]) {
-                    voices[category] = [];
-                }
+            try {
+                // Firebase Storageにアップロード
+                const fileName = `${currentUser.uid}/${Date.now()}_${title.replace(/[^a-zA-Z0-9]/g, '_')}.webm`;
+                const storageRef = storage.ref(fileName);
+                const snapshot = await storageRef.put(tempAudioBlob);
+                const downloadURL = await snapshot.ref.getDownloadURL();
                 
-                voices[category].push({
-                    title: title,
-                    data: window.tempRecording.data,
-                    timestamp: new Date().toISOString(),
-                    duration: window.tempRecording.duration
-                });
-                
-                saveVoices(voices);
+                // Firestoreにメタデータを保存
+                await db.collection('users')
+                    .doc(currentUser.uid)
+                    .collection('voices')
+                    .add({
+                        title: title,
+                        category: category,
+                        audioUrl: downloadURL,
+                        fileName: fileName,
+                        duration: window.tempDuration || 0,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        createdAt: new Date().toISOString()
+                    });
                 
                 // UIリセット
                 document.getElementById('voice-title').value = '';
@@ -1143,12 +1187,597 @@
                 document.getElementById('recordBtn').style.display = 'block';
                 document.getElementById('recordingTimer').style.display = 'none';
                 
-                showToast('✅ 録音を保存しました！');
+                tempAudioBlob = null;
+                window.tempDuration = null;
                 
-                // リスト画面を更新
+                showToast('✅ 録音を保存しました！');
+                loadVoices();
+            } catch (error) {
+                console.error('Save error:', error);
+                showToast('保存に失敗しました', true);
+            }
+        });
+
+        // 音声データの読み込み
+        async function loadVoices() {
+            if (!currentUser) return;
+
+            try {
+                const snapshot = await db.collection('users')
+                    .doc(currentUser.uid)
+                    .collection('voices')
+                    .orderBy('timestamp', 'desc')
+                    .get();
+
+                voicesCache = [];
+                snapshot.forEach((doc) => {
+                    voicesCache.push({ id: doc.id, ...doc.data() });
+                });
+
                 if (currentView === 'list') {
                     displayVoices();
                 }
+                updateStats();
+            } catch (error) {
+                console.error('Load voices error:', error);
+            }
+        }
+
+        // 音声リストの表示
+        function displayVoices() {
+            const voiceList = document.getElementById('voiceList');
+            
+            if (voicesCache.length === 0) {
+                voiceList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🎵</div>
+                        <p>まだ録音がありません</p>
+                    </div>
+                `;
+                return;
+            }
+
+            voiceList.innerHTML = voicesCache.map((voice) => `
+                <div class="voice-item" data-id="${voice.id}">
+                    <div class="voice-info">
+                        <div class="voice-title">${voice.title}</div>
+                        <div class="voice-meta">
+                            ${getCategoryLabel(voice.category)} | ${voice.timestamp ? new Date(voice.timestamp.seconds * 1000).toLocaleString() : ''}
+                            ${voice.duration ? ` | ${voice.duration}秒` : ''}
+                        </div>
+                    </div>
+                    <div class="voice-actions">
+                        <button class="btn-icon" onclick="playVoice('${voice.id}')">▶</button>
+                        <button class="btn-icon btn-share" onclick="openShareModal('${voice.id}')">📤</button>
+                        <button class="btn-icon btn-delete" onclick="deleteVoice('${voice.id}')">🗑</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // カテゴリーラベル
+        function getCategoryLabel(category) {
+            const labels = {
+                health: '体調不良',
+                greeting: '挨拶',
+                daily: '日常会話',
+                request: 'お願い',
+                emergency: '緊急',
+                other: 'その他'
+            };
+            return labels[category] || category;
+        }
+
+        // 音声再生
+        async function playVoice(voiceId, audioUrl = null) {
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+
+            if (!audioUrl) {
+                const voice = voicesCache.find(v => v.id === voiceId);
+                if (!voice) return;
+                audioUrl = voice.audioUrl;
+            }
+
+            currentAudio = new Audio(audioUrl);
+            currentAudio.play();
+            showToast('再生中...');
+        }
+
+        // 音声削除
+        async function deleteVoice(voiceId) {
+            if (!currentUser) return;
+            
+            if (!confirm('この録音を削除してもよろしいですか？')) return;
+
+            try {
+                const voice = voicesCache.find(v => v.id === voiceId);
+                if (voice && voice.fileName) {
+                    await storage.ref(voice.fileName).delete().catch(e => console.log('Storage delete error:', e));
+                }
+
+                await db.collection('users')
+                    .doc(currentUser.uid)
+                    .collection('voices')
+                    .doc(voiceId)
+                    .delete();
+
+                showToast('録音を削除しました');
+                loadVoices();
+            } catch (error) {
+                console.error('Delete error:', error);
+                showToast('削除に失敗しました', true);
+            }
+        }
+
+        // フレンド機能
+        async function sendFriendRequest() {
+            const friendId = document.getElementById('friendIdInput').value.trim();
+            if (!friendId) {
+                showToast('ユーザーIDを入力してください', true);
+                return;
+            }
+
+            if (friendId === currentUser.uid.substring(0, 8)) {
+                showToast('自分自身をフレンドに追加することはできません', true);
+                return;
+            }
+
+            try {
+                // フルUIDを検索
+                const usersSnapshot = await db.collection('users')
+                    .where('shortId', '==', friendId)
+                    .get();
+
+                if (usersSnapshot.empty) {
+                    showToast('ユーザーが見つかりません', true);
+                    return;
+                }
+
+                const targetUser = usersSnapshot.docs[0];
+                const targetUserId = targetUser.id;
+
+                // 既存のフレンドかチェック
+                const existingFriend = await db.collection('friends')
+                    .where('userId', '==', currentUser.uid)
+                    .where('friendId', '==', targetUserId)
+                    .get();
+
+                if (!existingFriend.empty) {
+                    showToast('既にフレンドです', true);
+                    return;
+                }
+
+                // フレンドリクエストを送信
+                await db.collection('friendRequests').add({
+                    fromUserId: currentUser.uid,
+                    fromUserName: currentUser.displayName || 'Anonymous',
+                    toUserId: targetUserId,
+                    status: 'pending',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                document.getElementById('friendIdInput').value = '';
+                showToast('フレンドリクエストを送信しました');
+            } catch (error) {
+                console.error('Friend request error:', error);
+                showToast('リクエストの送信に失敗しました', true);
+            }
+        }
+
+        // フレンドリクエストの表示
+        function displayFriendRequests(requests) {
+            const container = document.getElementById('friendRequests');
+            
+            if (requests.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📮</div>
+                        <p>リクエストはありません</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = requests.map(doc => {
+                const request = doc.data();
+                return `
+                    <div class="friend-item">
+                        <div class="friend-info">
+                            <div class="friend-avatar">${request.fromUserName.charAt(0)}</div>
+                            <div>
+                                <div class="friend-name">${request.fromUserName}</div>
+                                <div class="friend-status">フレンドリクエスト</div>
+                            </div>
+                        </div>
+                        <div class="friend-actions">
+                            <button class="btn-icon" style="background: #28a745;" onclick="acceptFriendRequest('${doc.id}', '${request.fromUserId}', '${request.fromUserName}')">✓</button>
+                            <button class="btn-icon btn-delete" onclick="rejectFriendRequest('${doc.id}')">×</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // フレンドリクエストの承認
+        async function acceptFriendRequest(requestId, friendId, friendName) {
+            try {
+                // 両方向のフレンド関係を作成
+                await db.collection('friends').add({
+                    userId: currentUser.uid,
+                    friendId: friendId,
+                    friendName: friendName,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                await db.collection('friends').add({
+                    userId: friendId,
+                    friendId: currentUser.uid,
+                    friendName: currentUser.displayName || 'Anonymous',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // リクエストを更新
+                await db.collection('friendRequests').doc(requestId).update({
+                    status: 'accepted'
+                });
+
+                showToast('フレンドリクエストを承認しました');
+                loadFriends();
+            } catch (error) {
+                console.error('Accept friend request error:', error);
+                showToast('承認に失敗しました', true);
+            }
+        }
+
+        // フレンドリクエストの拒否
+        async function rejectFriendRequest(requestId) {
+            try {
+                await db.collection('friendRequests').doc(requestId).update({
+                    status: 'rejected'
+                });
+                showToast('フレンドリクエストを拒否しました');
+            } catch (error) {
+                console.error('Reject friend request error:', error);
+                showToast('拒否に失敗しました', true);
+            }
+        }
+
+        // フレンドリストの読み込み
+        async function loadFriends() {
+            if (!currentUser) return;
+
+            try {
+                const snapshot = await db.collection('friends')
+                    .where('userId', '==', currentUser.uid)
+                    .get();
+
+                friendsCache = [];
+                snapshot.forEach((doc) => {
+                    friendsCache.push({ id: doc.id, ...doc.data() });
+                });
+
+                displayFriends();
+                updateStats();
+            } catch (error) {
+                console.error('Load friends error:', error);
+            }
+        }
+
+        // フレンドリストの表示
+        function displayFriends() {
+            const container = document.getElementById('friendList');
+            
+            if (friendsCache.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👥</div>
+                        <p>フレンドがいません</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = friendsCache.map(friend => `
+                <div class="friend-item">
+                    <div class="friend-info">
+                        <div class="friend-avatar">${friend.friendName.charAt(0)}</div>
+                        <div>
+                            <div class="friend-name">${friend.friendName}</div>
+                            <div class="friend-status">フレンド</div>
+                        </div>
+                    </div>
+                    <div class="friend-actions">
+                        <button class="btn-icon btn-delete" onclick="removeFriend('${friend.id}', '${friend.friendId}')">削除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // フレンド削除
+        async function removeFriend(friendDocId, friendUserId) {
+            if (!confirm('このフレンドを削除しますか？')) return;
+
+            try {
+                // 両方向のフレンド関係を削除
+                await db.collection('friends').doc(friendDocId).delete();
+                
+                const reverseSnapshot = await db.collection('friends')
+                    .where('userId', '==', friendUserId)
+                    .where('friendId', '==', currentUser.uid)
+                    .get();
+                
+                reverseSnapshot.docs.forEach(async (doc) => {
+                    await doc.ref.delete();
+                });
+
+                showToast('フレンドを削除しました');
+                loadFriends();
+            } catch (error) {
+                console.error('Remove friend error:', error);
+                showToast('削除に失敗しました', true);
+            }
+        }
+
+        // 共有モーダルを開く
+        function openShareModal(voiceId) {
+            currentShareVoiceId = voiceId;
+            const modal = document.getElementById('shareModal');
+            modal.classList.add('show');
+            
+            const friendSelectList = document.getElementById('friendSelectList');
+            if (friendsCache.length === 0) {
+                friendSelectList.innerHTML = '<p style="text-align: center; color: #999;">フレンドがいません</p>';
+            } else {
+                friendSelectList.innerHTML = friendsCache.map(friend => `
+                    <div class="friend-select-item" data-friend-id="${friend.friendId}" onclick="toggleFriendSelect(this)">
+                        <input type="checkbox" style="margin-right: 10px;">
+                        <span>${friend.friendName}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 共有モーダルを閉じる
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('show');
+            currentShareVoiceId = null;
+            document.getElementById('shareMessage').value = '';
+        }
+
+        // フレンド選択の切り替え
+        function toggleFriendSelect(element) {
+            element.classList.toggle('selected');
+            const checkbox = element.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+        }
+
+        // 音声共有
+        async function shareVoice() {
+            if (!currentShareVoiceId) return;
+            
+            const selectedFriends = document.querySelectorAll('.friend-select-item.selected');
+            if (selectedFriends.length === 0) {
+                showToast('送信先を選択してください', true);
+                return;
+            }
+
+            const voice = voicesCache.find(v => v.id === currentShareVoiceId);
+            if (!voice) return;
+
+            const message = document.getElementById('shareMessage').value;
+
+            try {
+                for (const friendElement of selectedFriends) {
+                    const friendId = friendElement.dataset.friendId;
+                    await db.collection('sharedVoices').add({
+                        fromUserId: currentUser.uid,
+                        fromUserName: currentUser.displayName || 'Anonymous',
+                        toUserId: friendId,
+                        voiceTitle: voice.title,
+                        voiceCategory: voice.category,
+                        audioUrl: voice.audioUrl,
+                        duration: voice.duration || 0,
+                        message: message,
+                        isRead: false,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+
+                showToast(`${selectedFriends.length}人に音声を送信しました`);
+                closeShareModal();
+            } catch (error) {
+                console.error('Share voice error:', error);
+                showToast('送信に失敗しました', true);
+            }
+        }
+
+        // 共有音声の読み込み
+        async function loadSharedVoices() {
+            if (!currentUser) return;
+
+            try {
+                // 受信した音声
+                const receivedSnapshot = await db.collection('sharedVoices')
+                    .where('toUserId', '==', currentUser.uid)
+                    .orderBy('timestamp', 'desc')
+                    .get();
+
+                const receivedContainer = document.getElementById('receivedVoices');
+                if (receivedSnapshot.empty) {
+                    receivedContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <p>受信した音声はありません</p>
+                        </div>
+                    `;
+                } else {
+                    receivedContainer.innerHTML = receivedSnapshot.docs.map(doc => {
+                        const data = doc.data();
+                        return `
+                            <div class="shared-voice-item">
+                                <div class="shared-voice-header">
+                                    <div class="sender-info">
+                                        送信者: ${data.fromUserName}
+                                    </div>
+                                    <div style="font-size: 12px; color: #999;">
+                                        ${data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString() : ''}
+                                    </div>
+                                </div>
+                                <div class="shared-voice-title">${data.voiceTitle}</div>
+                                ${data.message ? `<div class="shared-voice-message">${data.message}</div>` : ''}
+                                <div class="voice-actions">
+                                    <button class="btn-icon" onclick="playSharedVoice('${doc.id}', '${data.audioUrl}')">▶</button>
+                                    <button class="btn-icon btn-save" onclick="saveSharedVoice('${doc.id}')">💾</button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // 送信した音声
+                const sentSnapshot = await db.collection('sharedVoices')
+                    .where('fromUserId', '==', currentUser.uid)
+                    .orderBy('timestamp', 'desc')
+                    .limit(10)
+                    .get();
+
+                const sentContainer = document.getElementById('sentVoices');
+                if (sentSnapshot.empty) {
+                    sentContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📤</div>
+                            <p>送信した音声はありません</p>
+                        </div>
+                    `;
+                } else {
+                    sentContainer.innerHTML = sentSnapshot.docs.map(doc => {
+                        const data = doc.data();
+                        return `
+                            <div class="voice-item">
+                                <div class="voice-info">
+                                    <div class="voice-title">${data.voiceTitle}</div>
+                                    <div class="voice-meta">
+                                        送信先: ユーザー | ${data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString() : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            } catch (error) {
+                console.error('Load shared voices error:', error);
+            }
+        }
+
+        // 共有音声の再生
+        async function playSharedVoice(sharedId, audioUrl) {
+            playVoice(null, audioUrl);
+            
+            // 既読にする
+            await db.collection('sharedVoices').doc(sharedId).update({
+                isRead: true
+            });
+        }
+
+        // 共有音声の保存
+        async function saveSharedVoice(sharedId) {
+            try {
+                const sharedDoc = await db.collection('sharedVoices').doc(sharedId).get();
+                const sharedData = sharedDoc.data();
+
+                // 自分の音声として保存
+                await db.collection('users')
+                    .doc(currentUser.uid)
+                    .collection('voices')
+                    .add({
+                        title: `[共有] ${sharedData.voiceTitle}`,
+                        category: sharedData.voiceCategory,
+                        audioUrl: sharedData.audioUrl,
+                        duration: sharedData.duration,
+                        fromUser: sharedData.fromUserName,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                showToast('音声を保存しました');
+                loadVoices();
+            } catch (error) {
+                console.error('Save shared voice error:', error);
+                showToast('保存に失敗しました', true);
+            }
+        }
+
+        // 受信箱タブの切り替え
+        function switchInboxTab(tab) {
+            document.querySelectorAll('.inbox-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (tab === 'received') {
+                document.getElementById('receivedVoices').style.display = 'block';
+                document.getElementById('sentVoices').style.display = 'none';
+            } else {
+                document.getElementById('receivedVoices').style.display = 'none';
+                document.getElementById('sentVoices').style.display = 'block';
+            }
+        }
+
+        // 自分のIDをコピー
+        function copyMyId() {
+            const shortId = currentUser.uid.substring(0, 8);
+            navigator.clipboard.writeText(shortId);
+            showToast('IDをコピーしました');
+        }
+
+        // 統計情報の更新
+        function updateStats() {
+            document.getElementById('voiceCount').textContent = voicesCache.length;
+            document.getElementById('friendCount').textContent = friendsCache.length;
+            
+            // 共有数のカウント（簡易版）
+            db.collection('sharedVoices')
+                .where('fromUserId', '==', currentUser.uid)
+                .get()
+                .then(snapshot => {
+                    document.getElementById('sharedCount').textContent = snapshot.size;
+                });
+        }
+
+        // バッジの更新
+        function updateBadge(elementId, count) {
+            const badge = document.getElementById(elementId);
+            if (count > 0) {
+                badge.style.display = 'flex';
+                badge.textContent = count;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // ビュー切り替え
+        function switchView(view) {
+            currentView = view;
+            
+            document.querySelectorAll('.view-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.getElementById(view + 'View').classList.add('active');
+            
+            document.querySelectorAll('.footer-btn').forEach(btn => {
+                if (btn.dataset.view === view) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            if (view === 'list') {
+                displayVoices();
+            } else if (view === 'inbox') {
+                loadSharedVoices();
+            } else if (view === 'friends') {
+                loadFriends();
             }
         }
 
@@ -1161,85 +1790,24 @@
             document.getElementById('recordingTimer').textContent = `${minutes}:${seconds}`;
         }
 
-        // 音量更新
-        function updateVolume(e) {
-            document.getElementById('volumeValue').textContent = `${e.target.value}%`;
-            if (currentAudio) {
-                currentAudio.volume = e.target.value / 100;
-            }
-            if (previewAudio) {
-                previewAudio.volume = e.target.value / 100;
-            }
-        }
-
-        // デフォルト設定の読み込み
-        function loadDefaultSettings() {
-            const defaultSortMode = localStorage.getItem('defaultSortMode') || 'category';
-            document.getElementById('defaultSortMode').value = defaultSortMode;
-            currentSortMode = defaultSortMode;
-        }
-
-        // デフォルトソートモードの保存
-        function saveDefaultSortMode() {
-            const mode = document.getElementById('defaultSortMode').value;
-            localStorage.setItem('defaultSortMode', mode);
-            currentSortMode = mode;
-            showToast('設定を保存しました');
-        }
-
-        // ローカルストレージから音声データを読み込み
-        function loadVoices() {
-            const voices = localStorage.getItem('voiceAssistant') || '{}';
-            return JSON.parse(voices);
-        }
-
-        // ローカルストレージに音声データを保存
-        function saveVoices(voices) {
-            localStorage.setItem('voiceAssistant', JSON.stringify(voices));
-        }
-
-        // データのインポート
-        function importData(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const importedData = JSON.parse(e.target.result);
-                        
-                        if (confirm('既存のデータに追加しますか？（キャンセルで上書き）')) {
-                            const currentVoices = loadVoices();
-                            for (const category in importedData) {
-                                if (!currentVoices[category]) {
-                                    currentVoices[category] = [];
-                                }
-                                currentVoices[category].push(...importedData[category]);
-                            }
-                            saveVoices(currentVoices);
-                        } else {
-                            saveVoices(importedData);
-                        }
-                        
-                        displayVoices();
-                        showToast('データをインポートしました');
-                    } catch (error) {
-                        alert('ファイルの読み込みに失敗しました');
-                        console.error('Import error:', error);
-                    }
-                };
-                reader.readAsText(file);
-            }
-        }
-
-        // トースト通知を表示
-        function showToast(message, duration = 3000) {
+        // トースト表示
+        function showToast(message, isError = false, duration = 3000) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
+            toast.className = isError ? 'toast error' : 'toast';
             toast.style.display = 'block';
             setTimeout(() => {
                 toast.style.display = 'none';
             }, duration);
         }
+
+        // イベントリスナー設定
+        document.addEventListener('DOMContentLoaded', () => {
+            // フッターボタン
+            document.querySelectorAll('.footer-btn').forEach(btn => {
+                btn.addEventListener('click', () => switchView(btn.dataset.view));
+            });
+        });
     </script>
 </body>
 </html>

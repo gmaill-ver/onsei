@@ -14,11 +14,11 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f0f0f0;
+            background: #F9FAFB;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            color: #333;
+            color: #1F2937;
         }
 
         /* ローディング画面 */
@@ -36,8 +36,8 @@
         }
 
         .loading-spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            border: 3px solid #E5E7EB;
+            border-top: 3px solid #3B82F6;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -57,27 +57,29 @@
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #FFFFFF;
         }
 
         .login-card {
             background: white;
-            border-radius: 20px;
+            border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
             max-width: 400px;
             width: 100%;
             text-align: center;
+            border: 1px solid #E5E7EB;
         }
 
         .login-title {
-            font-size: 24px;
+            font-size: 28px;
             margin-bottom: 10px;
-            color: #333;
+            color: #1F2937;
+            font-weight: 700;
         }
 
         .login-subtitle {
-            color: #999;
+            color: #6B7280;
             margin-bottom: 30px;
             font-size: 14px;
         }
@@ -85,7 +87,7 @@
         .btn-google {
             width: 100%;
             padding: 12px 24px;
-            background: #4285f4;
+            background: #3B82F6;
             color: white;
             border: none;
             border-radius: 8px;
@@ -95,12 +97,14 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            font-weight: 500;
         }
 
         .btn-google:hover {
-            background: #357ae8;
-            transform: translateY(-2px);
+            background: #2563EB;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         /* メインアプリ */
@@ -112,65 +116,76 @@
 
         /* ヘッダー */
         .header {
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: #FFFFFF;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            height: 50px;
+            height: 56px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 15px;
+            padding: 0 20px;
+            border-bottom: 1px solid #E5E7EB;
         }
 
         .header-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            color: #1F2937;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .header-user {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 12px;
-            color: #666;
+            gap: 12px;
+            font-size: 14px;
+            color: #6B7280;
         }
 
         .user-id-display {
             padding: 4px 8px;
-            background: #f0f0f0;
-            border-radius: 5px;
-            font-size: 10px;
-            color: #666;
+            background: #F3F4F6;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #4B5563;
+            font-family: monospace;
         }
 
         .btn-logout {
-            padding: 5px 10px;
-            background: #dc3545;
+            padding: 6px 12px;
+            background: #EF4444;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             font-size: 12px;
             cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: #DC2626;
         }
 
         /* メインコンテンツ */
         .main-content {
             flex: 1;
-            margin-top: 50px;
+            margin-top: 56px;
             margin-bottom: 60px;
-            padding: 10px;
+            padding: 20px;
             overflow: hidden;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
-            height: calc(100vh - 110px);
+            height: calc(100vh - 136px);
             overflow: hidden;
         }
 
@@ -188,16 +203,17 @@
         /* ホーム画面 */
         .home-controls {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E7EB;
         }
 
         .notification-badge {
             position: absolute;
             top: -5px;
             right: -5px;
-            background: #ff3838;
+            background: #F97316;
             color: white;
             border-radius: 50%;
             width: 20px;
@@ -212,100 +228,115 @@
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
             color: white;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
         }
 
         .stat-number {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
+            margin-bottom: 4px;
         }
 
         .stat-label {
-            font-size: 12px;
+            font-size: 14px;
             opacity: 0.9;
         }
 
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
         }
 
         .action-btn {
-            padding: 15px;
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
+            padding: 20px;
+            background: #FFFFFF;
+            border: 2px solid #E5E7EB;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             text-align: center;
+            position: relative;
         }
 
         .action-btn:hover {
-            background: #667eea;
+            background: #3B82F6;
             color: white;
-            border-color: #667eea;
+            border-color: #3B82F6;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
         }
 
         .action-icon {
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 28px;
+            margin-bottom: 8px;
         }
 
         .action-label {
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: 500;
         }
 
         /* 録音セクション */
         .recording-section {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E7EB;
         }
 
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 5px;
-            color: #666;
+            margin-bottom: 8px;
+            color: #374151;
             font-size: 14px;
+            font-weight: 500;
         }
 
         .input-group input, .input-group select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
+            padding: 10px 12px;
+            border: 1px solid #D1D5DB;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .recording-timer {
             text-align: center;
-            font-size: 32px;
-            color: #ff3838;
+            font-size: 48px;
+            color: #EF4444;
             font-weight: bold;
-            margin: 20px 0;
+            margin: 30px 0;
             display: none;
+            font-variant-numeric: tabular-nums;
         }
 
         .record-controls {
             display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 24px;
         }
 
         .btn {
@@ -313,53 +344,83 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
             flex: 1;
         }
 
         .btn-record {
-            background: #ff6b6b;
+            background: #EF4444;
             color: white;
         }
 
         .btn-record:hover {
-            background: #ff5252;
+            background: #DC2626;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
         .btn-record.recording {
-            background: #ff3838;
+            background: #DC2626;
             animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 56, 56, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 56, 56, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 56, 56, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .btn-stop {
+            background: #6B7280;
+            color: white;
+        }
+
+        .btn-stop:hover {
+            background: #4B5563;
+        }
+
+        .btn-save {
+            background: #10B981;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #059669;
+        }
+
+        .btn-play-preview {
+            background: #3B82F6;
+            color: white;
+        }
+
+        .btn-play-preview:hover {
+            background: #2563EB;
         }
 
         /* 音声リスト */
         .voice-list {
             display: grid;
-            gap: 15px;
+            gap: 12px;
         }
 
         .voice-item {
             background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 15px;
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: all 0.3s;
+            transition: all 0.2s;
             cursor: pointer;
         }
 
         .voice-item:hover {
-            border-color: #667eea;
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            border-color: #3B82F6;
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
         }
 
         .voice-info {
@@ -368,29 +429,30 @@
 
         .voice-title {
             font-weight: 600;
-            margin-bottom: 5px;
-            font-size: 16px;
+            margin-bottom: 4px;
+            font-size: 15px;
+            color: #1F2937;
         }
 
         .voice-meta {
             font-size: 12px;
-            color: #999;
+            color: #6B7280;
         }
 
         .voice-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .btn-icon {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
             border: none;
-            background: #667eea;
+            background: #3B82F6;
             color: white;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -398,72 +460,82 @@
         }
 
         .btn-icon:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .btn-share {
-            background: #28a745;
+            background: #10B981;
         }
 
         .btn-delete {
-            background: #dc3545;
+            background: #EF4444;
         }
 
         /* フレンドセクション */
         .friends-section {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E7EB;
         }
 
         .add-friend-form {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
         .add-friend-form input {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 10px 12px;
+            border: 1px solid #D1D5DB;
             border-radius: 8px;
+            font-size: 14px;
         }
 
         .btn-add-friend {
             padding: 10px 20px;
-            background: #667eea;
+            background: #3B82F6;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-add-friend:hover {
+            background: #2563EB;
         }
 
         .friend-list {
             display: grid;
-            gap: 10px;
+            gap: 12px;
         }
 
         .friend-item {
-            background: #f8f9fa;
+            background: #F9FAFB;
             border-radius: 10px;
-            padding: 15px;
+            padding: 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border: 1px solid #E5E7EB;
         }
 
         .friend-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .friend-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -473,16 +545,17 @@
 
         .friend-name {
             font-weight: 600;
+            color: #1F2937;
         }
 
         .friend-status {
             font-size: 12px;
-            color: #999;
+            color: #6B7280;
         }
 
         .friend-actions {
             display: flex;
-            gap: 5px;
+            gap: 8px;
         }
 
         /* 共有モーダル */
@@ -505,8 +578,8 @@
 
         .modal-content {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
+            border-radius: 12px;
+            padding: 24px;
             max-width: 400px;
             width: 90%;
             max-height: 70vh;
@@ -514,70 +587,81 @@
         }
 
         .modal-header {
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 600;
             margin-bottom: 20px;
+            color: #1F2937;
         }
 
         .modal-close {
             float: right;
             font-size: 24px;
             cursor: pointer;
-            color: #999;
+            color: #6B7280;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #1F2937;
         }
 
         .friend-select-list {
             display: grid;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 16px;
         }
 
         .friend-select-item {
-            padding: 10px;
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
+            padding: 12px;
+            background: #F9FAFB;
+            border: 2px solid #E5E7EB;
             border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            transition: all 0.2s;
         }
 
         .friend-select-item:hover {
-            border-color: #667eea;
+            border-color: #3B82F6;
         }
 
         .friend-select-item.selected {
-            background: #667eea;
+            background: #3B82F6;
             color: white;
-            border-color: #667eea;
+            border-color: #3B82F6;
         }
 
         /* 受信箱 */
         .inbox-section {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #E5E7EB;
         }
 
         .inbox-tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #E5E7EB;
         }
 
         .inbox-tab {
-            padding: 10px 20px;
+            padding: 12px 20px;
             background: transparent;
             border: none;
             cursor: pointer;
             position: relative;
+            color: #6B7280;
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
         .inbox-tab.active {
-            color: #667eea;
+            color: #3B82F6;
         }
 
         .inbox-tab.active::after {
@@ -587,47 +671,48 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: #667eea;
+            background: #3B82F6;
         }
 
         .shared-voice-item {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 10px;
+            background: #FFF7ED;
+            border: 1px solid #F97316;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
         }
 
         .shared-voice-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .sender-info {
             font-size: 12px;
-            color: #666;
+            color: #6B7280;
         }
 
         .shared-voice-title {
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            color: #1F2937;
         }
 
         .shared-voice-message {
             font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
+            color: #4B5563;
+            margin-bottom: 12px;
             padding: 10px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 6px;
         }
 
         /* フッター */
         .footer {
             background: white;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
             position: fixed;
             bottom: 0;
             left: 0;
@@ -637,6 +722,7 @@
             align-items: center;
             justify-content: space-around;
             z-index: 1000;
+            border-top: 1px solid #E5E7EB;
         }
 
         .footer-btn {
@@ -649,18 +735,18 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
-            color: #999;
+            transition: all 0.2s;
+            color: #6B7280;
             position: relative;
         }
 
         .footer-btn:hover {
-            background: #f0f0f0;
-            color: #667eea;
+            background: #F3F4F6;
+            color: #3B82F6;
         }
 
         .footer-btn.active {
-            color: #667eea;
+            color: #3B82F6;
         }
 
         .footer-icon {
@@ -669,7 +755,8 @@
         }
 
         .footer-label {
-            font-size: 10px;
+            font-size: 11px;
+            font-weight: 500;
         }
 
         /* トースト通知 */
@@ -678,18 +765,20 @@
             bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(40, 167, 69, 0.95);
+            background: rgba(16, 185, 129, 0.95);
             color: white;
-            padding: 15px 30px;
+            padding: 12px 24px;
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             display: none;
             animation: slideUp 0.3s ease;
             z-index: 2000;
+            font-size: 14px;
+            font-weight: 500;
         }
 
         .toast.error {
-            background: rgba(220, 53, 69, 0.95);
+            background: rgba(239, 68, 68, 0.95);
         }
 
         @keyframes slideUp {
@@ -706,12 +795,13 @@
         .empty-state {
             text-align: center;
             padding: 40px;
-            color: #999;
+            color: #9CA3AF;
         }
 
         .empty-state-icon {
             font-size: 48px;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
+            opacity: 0.5;
         }
     </style>
 </head>
@@ -737,7 +827,10 @@
     <div class="app-container" id="appContainer">
         <!-- ヘッダー -->
         <header class="header">
-            <div class="header-title">🎙 Voice Assistant</div>
+            <div class="header-title">
+                <span style="font-size: 24px;">🎙</span>
+                <span>Voice Assistant</span>
+            </div>
             <div class="header-user">
                 <span id="userName">Guest</span>
                 <span class="user-id-display" id="userIdDisplay">ID: ----</span>
@@ -854,19 +947,19 @@
                 <!-- フレンド画面 -->
                 <div id="friendsView" class="view-section">
                     <div class="friends-section">
-                        <h3 style="margin-bottom: 15px;">フレンド管理</h3>
+                        <h3 style="margin-bottom: 20px; color: #1F2937;">フレンド管理</h3>
                         
                         <div class="add-friend-form">
                             <input type="text" id="friendIdInput" placeholder="フレンドのユーザーIDを入力">
                             <button class="btn-add-friend" onclick="sendFriendRequest()">追加</button>
                         </div>
 
-                        <div style="margin-bottom: 20px; padding: 10px; background: #f0f0f0; border-radius: 5px;">
-                            <small>あなたのID: <span id="myUserId" style="font-weight: bold;">----</span></small>
-                            <button onclick="copyMyId()" style="margin-left: 10px; padding: 2px 8px; font-size: 12px;">コピー</button>
+                        <div style="margin-bottom: 24px; padding: 12px; background: #F3F4F6; border-radius: 8px;">
+                            <small style="color: #6B7280;">あなたのID: <span id="myUserId" style="font-weight: bold; font-family: monospace;">----</span></small>
+                            <button onclick="copyMyId()" style="margin-left: 10px; padding: 4px 10px; font-size: 12px; background: #3B82F6; color: white; border: none; border-radius: 4px; cursor: pointer;">コピー</button>
                         </div>
 
-                        <h4 style="margin-bottom: 10px;">フレンドリスト</h4>
+                        <h4 style="margin-bottom: 12px; color: #374151;">フレンドリスト</h4>
                         <div class="friend-list" id="friendList">
                             <div class="empty-state">
                                 <div class="empty-state-icon">👥</div>
@@ -874,7 +967,7 @@
                             </div>
                         </div>
 
-                        <h4 style="margin: 20px 0 10px;">フレンドリクエスト</h4>
+                        <h4 style="margin: 24px 0 12px; color: #374151;">フレンドリクエスト</h4>
                         <div class="friend-list" id="friendRequests">
                             <div class="empty-state">
                                 <div class="empty-state-icon">📮</div>
@@ -922,11 +1015,11 @@
                 <label>メッセージ（任意）</label>
                 <input type="text" id="shareMessage" placeholder="メッセージを入力...">
             </div>
-            <div style="margin-bottom: 10px; color: #666; font-size: 14px;">送信先を選択：</div>
+            <div style="margin-bottom: 12px; color: #6B7280; font-size: 14px;">送信先を選択：</div>
             <div class="friend-select-list" id="friendSelectList">
                 <!-- フレンドリストがここに表示される -->
             </div>
-            <button class="btn btn-save" onclick="shareVoice()" style="width: 100%; margin-top: 10px;">送信</button>
+            <button class="btn btn-save" onclick="shareVoice()" style="width: 100%; margin-top: 12px;">送信</button>
         </div>
     </div>
 
@@ -945,7 +1038,7 @@
             apiKey: "AIzaSyAOeJs3uh4pKCJkzF09nmr4k02mZWMpTIE",
             authDomain: "onroku.firebaseapp.com",
             projectId: "onroku",
-            storageBucket: "Yonroku.firebasestorage.app",
+            storageBucket: "onroku.appspot.com", // 修正: 正しいバケット名
             messagingSenderId: "839251928872",
             appId: "1:839251928872:web:bf629c54af655ef102921d"
         };
@@ -1003,15 +1096,19 @@
         async function initializeUserData() {
             if (!currentUser) return;
             
-            const userDoc = await db.collection('users').doc(currentUser.uid).get();
-            if (!userDoc.exists) {
-                await db.collection('users').doc(currentUser.uid).set({
-                    displayName: currentUser.displayName || 'Anonymous User',
-                    email: currentUser.email || null,
-                    photoURL: currentUser.photoURL || null,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    shortId: currentUser.uid.substring(0, 8)
-                });
+            try {
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                if (!userDoc.exists) {
+                    await db.collection('users').doc(currentUser.uid).set({
+                        displayName: currentUser.displayName || 'Anonymous User',
+                        email: currentUser.email || null,
+                        photoURL: currentUser.photoURL || null,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        shortId: currentUser.uid.substring(0, 8)
+                    });
+                }
+            } catch (error) {
+                console.error('Initialize user data error:', error);
             }
         }
 
@@ -1033,6 +1130,8 @@
                         displayVoices();
                     }
                     updateStats();
+                }, (error) => {
+                    console.error('Voices listener error:', error);
                 });
             unsubscribeFunctions.push(voicesUnsubscribe);
 
@@ -1044,6 +1143,8 @@
                     displayFriendRequests(snapshot.docs);
                     const count = snapshot.docs.length;
                     updateBadge('footerFriendBadge', count);
+                }, (error) => {
+                    console.error('Friend requests listener error:', error);
                 });
             unsubscribeFunctions.push(requestsUnsubscribe);
 
@@ -1055,6 +1156,8 @@
                     const count = snapshot.docs.length;
                     updateBadge('inboxBadge', count);
                     updateBadge('footerInboxBadge', count);
+                }, (error) => {
+                    console.error('Shared voices listener error:', error);
                 });
             unsubscribeFunctions.push(sharedUnsubscribe);
         }
@@ -1122,7 +1225,7 @@
 
         // 録音停止
         document.getElementById('stopBtn').addEventListener('click', () => {
-            if (mediaRecorder) {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
                 mediaRecorder.stop();
                 mediaRecorder.stream.getTracks().forEach(track => track.stop());
                 
@@ -1154,12 +1257,17 @@
 
         // 録音保存
         document.getElementById('saveBtn').addEventListener('click', async () => {
-            if (!currentUser || !tempAudioBlob) return;
+            if (!currentUser || !tempAudioBlob) {
+                showToast('録音データがありません', true);
+                return;
+            }
 
             const title = document.getElementById('voice-title').value || '無題の録音';
             const category = document.getElementById('voice-category').value;
             
             try {
+                showToast('保存中...');
+                
                 // Firebase Storageにアップロード
                 const fileName = `${currentUser.uid}/${Date.now()}_${title.replace(/[^a-zA-Z0-9]/g, '_')}.webm`;
                 const storageRef = storage.ref(fileName);
@@ -1186,6 +1294,7 @@
                 document.getElementById('saveBtn').style.display = 'none';
                 document.getElementById('recordBtn').style.display = 'block';
                 document.getElementById('recordingTimer').style.display = 'none';
+                document.getElementById('recordingTimer').textContent = '00:00';
                 
                 tempAudioBlob = null;
                 window.tempDuration = null;
@@ -1194,7 +1303,7 @@
                 loadVoices();
             } catch (error) {
                 console.error('Save error:', error);
-                showToast('保存に失敗しました', true);
+                showToast('保存に失敗しました: ' + error.message, true);
             }
         });
 
@@ -1392,7 +1501,7 @@
                             </div>
                         </div>
                         <div class="friend-actions">
-                            <button class="btn-icon" style="background: #28a745;" onclick="acceptFriendRequest('${doc.id}', '${request.fromUserId}', '${request.fromUserName}')">✓</button>
+                            <button class="btn-icon" style="background: #10B981;" onclick="acceptFriendRequest('${doc.id}', '${request.fromUserId}', '${request.fromUserName}')">✓</button>
                             <button class="btn-icon btn-delete" onclick="rejectFriendRequest('${doc.id}')">×</button>
                         </div>
                     </div>
@@ -1528,7 +1637,7 @@
             
             const friendSelectList = document.getElementById('friendSelectList');
             if (friendsCache.length === 0) {
-                friendSelectList.innerHTML = '<p style="text-align: center; color: #999;">フレンドがいません</p>';
+                friendSelectList.innerHTML = '<p style="text-align: center; color: #9CA3AF;">フレンドがいません</p>';
             } else {
                 friendSelectList.innerHTML = friendsCache.map(friend => `
                     <div class="friend-select-item" data-friend-id="${friend.friendId}" onclick="toggleFriendSelect(this)">
@@ -1602,6 +1711,7 @@
                 const receivedSnapshot = await db.collection('sharedVoices')
                     .where('toUserId', '==', currentUser.uid)
                     .orderBy('timestamp', 'desc')
+                    .limit(20)
                     .get();
 
                 const receivedContainer = document.getElementById('receivedVoices');
@@ -1621,7 +1731,7 @@
                                     <div class="sender-info">
                                         送信者: ${data.fromUserName}
                                     </div>
-                                    <div style="font-size: 12px; color: #999;">
+                                    <div style="font-size: 12px; color: #9CA3AF;">
                                         ${data.timestamp ? new Date(data.timestamp.seconds * 1000).toLocaleString() : ''}
                                     </div>
                                 </div>
@@ -1668,6 +1778,7 @@
                 }
             } catch (error) {
                 console.error('Load shared voices error:', error);
+                // インデックスエラーの場合は一旦無視（コンソールにFirestoreのインデックス作成URLが表示される）
             }
         }
 
@@ -1735,22 +1846,26 @@
             document.getElementById('friendCount').textContent = friendsCache.length;
             
             // 共有数のカウント（簡易版）
-            db.collection('sharedVoices')
-                .where('fromUserId', '==', currentUser.uid)
-                .get()
-                .then(snapshot => {
-                    document.getElementById('sharedCount').textContent = snapshot.size;
-                });
+            if (currentUser) {
+                db.collection('sharedVoices')
+                    .where('fromUserId', '==', currentUser.uid)
+                    .get()
+                    .then(snapshot => {
+                        document.getElementById('sharedCount').textContent = snapshot.size;
+                    });
+            }
         }
 
         // バッジの更新
         function updateBadge(elementId, count) {
             const badge = document.getElementById(elementId);
-            if (count > 0) {
-                badge.style.display = 'flex';
-                badge.textContent = count;
-            } else {
-                badge.style.display = 'none';
+            if (badge) {
+                if (count > 0) {
+                    badge.style.display = 'flex';
+                    badge.textContent = count;
+                } else {
+                    badge.style.display = 'none';
+                }
             }
         }
 

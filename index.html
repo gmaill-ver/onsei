@@ -1403,9 +1403,17 @@
             try {
                 const voice = voicesCache.find(v => v.id === voiceId);
                 if (voice && voice.fileName) {
-                    await storage.ref(voice.fileName).delete().catch(e => console.log('Storage delete error:', e));
+                    // Storageから削除（エラーをキャッチ）
+                    try {
+                        const fileRef = storage.ref(voice.fileName);
+                        await fileRef.delete();
+                    } catch (storageError) {
+                        console.log('Storage delete error (might be already deleted):', storageError);
+                        // ファイルが既に削除されている場合もあるので、エラーは無視して続行
+                    }
                 }
 
+                // Firestoreから削除
                 await db.collection('users')
                     .doc(currentUser.uid)
                     .collection('voices')

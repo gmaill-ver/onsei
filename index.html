@@ -1074,7 +1074,7 @@
                 document.getElementById('appContainer').style.display = 'flex';
                 document.getElementById('userName').textContent = user.displayName || 'User';
                 
-                const shortId = user.uid.substring(0, 8);
+                const shortId = user.uid.substring(0, 8).toUpperCase(); // 大文字に統一
                 document.getElementById('userIdDisplay').textContent = `ID: ${shortId}`;
                 document.getElementById('myUserId').textContent = shortId;
                 
@@ -1098,14 +1098,28 @@
             
             try {
                 const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                const shortId = currentUser.uid.substring(0, 8).toUpperCase(); // 大文字に統一
+                
                 if (!userDoc.exists) {
+                    // 新規ユーザーの作成
                     await db.collection('users').doc(currentUser.uid).set({
                         displayName: currentUser.displayName || 'Anonymous User',
                         email: currentUser.email || null,
                         photoURL: currentUser.photoURL || null,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        shortId: currentUser.uid.substring(0, 8)
+                        shortId: shortId,
+                        uid: currentUser.uid
                     });
+                    console.log('New user created with shortId:', shortId);
+                } else {
+                    // 既存ユーザーでshortIdがない場合は追加
+                    const userData = userDoc.data();
+                    if (!userData.shortId) {
+                        await db.collection('users').doc(currentUser.uid).update({
+                            shortId: shortId
+                        });
+                        console.log('Updated user with shortId:', shortId);
+                    }
                 }
             } catch (error) {
                 console.error('Initialize user data error:', error);
@@ -1268,25 +1282,44 @@
             try {
                 showToast('保存中...');
                 
-                // Firebase Storageにアップロード
-                const fileName = `${currentUser.uid}/${Date.now()}_${title.replace(/[^a-zA-Z0-9]/g, '_')}.webm`;
+                // Firebase Storageにアップロード（メタデータ付き）
+                const timestamp = Date.now();
+                const sanitizedTitle = title.replace(/[^a-zA-Z0-9ぁ-んァ-ヶー一-龠]/g, '_');
+                const fileName = `voices/${currentUser.uid}/${timestamp}_${sanitizedTitle}.webm`;
+                
+                // メタデータを設定
+                const metadata = {
+                    contentType: 'audio/webm',
+                    customMetadata: {
+                        'title': title,
+                        'category': category,
+                        'userId': currentUser.uid,
+                        'timestamp': timestamp.toString()
+                    }
+                };
+                
+                // Storage参照を作成してアップロード
                 const storageRef = storage.ref(fileName);
-                const snapshot = await storageRef.put(tempAudioBlob);
-                const downloadURL = await snapshot.ref.getDownloadURL();
+                const uploadTask = await storageRef.put(tempAudioBlob, metadata);
+                
+                // ダウンロードURLを取得
+                const downloadURL = await uploadTask.ref.getDownloadURL();
                 
                 // Firestoreにメタデータを保存
+                const voiceData = {
+                    title: title,
+                    category: category,
+                    audioUrl: downloadURL,
+                    fileName: fileName,
+                    duration: window.tempDuration || 0,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdAt: new Date().toISOString()
+                };
+                
                 await db.collection('users')
                     .doc(currentUser.uid)
                     .collection('voices')
-                    .add({
-                        title: title,
-                        category: category,
-                        audioUrl: downloadURL,
-                        fileName: fileName,
-                        duration: window.tempDuration || 0,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                        createdAt: new Date().toISOString()
-                    });
+                    .add(voiceData);
                 
                 // UIリセット
                 document.getElementById('voice-title').value = '';
@@ -1302,8 +1335,21 @@
                 showToast('✅ 録音を保存しました！');
                 loadVoices();
             } catch (error) {
-                console.error('Save error:', error);
-                showToast('保存に失敗しました: ' + error.message, true);
+                console.error('Save error details:', error);
+                
+                // エラーの詳細を表示
+                let errorMessage = '保存に失敗しました: ';
+                if (error.code === 'storage/unauthorized') {
+                    errorMessage += 'アクセス権限がありません。再度ログインしてください。';
+                } else if (error.code === 'storage/canceled') {
+                    errorMessage += 'アップロードがキャンセルされました。';
+                } else if (error.code === 'storage/unknown') {
+                    errorMessage += 'ネットワークエラーが発生しました。';
+                } else {
+                    errorMessage += error.message;
+                }
+                
+                showToast(errorMessage, true);
             }
         });
 
@@ -1430,30 +1476,48 @@
 
         // フレンド機能
         async function sendFriendRequest() {
-            const friendId = document.getElementById('friendIdInput').value.trim();
-            if (!friendId) {
+            const friendIdInput = document.getElementById('friendIdInput').value.trim().toUpperCase(); // 大文字に統一
+            if (!friendIdInput) {
                 showToast('ユーザーIDを入力してください', true);
                 return;
             }
 
-            if (friendId === currentUser.uid.substring(0, 8)) {
+            const myShortId = currentUser.uid.substring(0, 8).toUpperCase();
+            if (friendIdInput === myShortId) {
                 showToast('自分自身をフレンドに追加することはできません', true);
                 return;
             }
 
             try {
-                // フルUIDを検索
+                console.log('Searching for user with shortId:', friendIdInput);
+                
+                // shortIdでユーザーを検索（大文字小文字を統一）
                 const usersSnapshot = await db.collection('users')
-                    .where('shortId', '==', friendId)
+                    .where('shortId', '==', friendIdInput)
                     .get();
 
+                console.log('Search results:', usersSnapshot.size, 'users found');
+
                 if (usersSnapshot.empty) {
-                    showToast('ユーザーが見つかりません', true);
-                    return;
+                    // もし見つからない場合、小文字でも試す
+                    const usersSnapshotLower = await db.collection('users')
+                        .where('shortId', '==', friendIdInput.toLowerCase())
+                        .get();
+                    
+                    if (usersSnapshotLower.empty) {
+                        showToast('ユーザーID: ' + friendIdInput + ' が見つかりません', true);
+                        return;
+                    } else {
+                        // 小文字で見つかった場合、そのユーザーを使用
+                        var targetUser = usersSnapshotLower.docs[0];
+                    }
+                } else {
+                    var targetUser = usersSnapshot.docs[0];
                 }
 
-                const targetUser = usersSnapshot.docs[0];
                 const targetUserId = targetUser.id;
+                const targetUserData = targetUser.data();
+                console.log('Found user:', targetUserData.displayName, 'with ID:', targetUserId);
 
                 // 既存のフレンドかチェック
                 const existingFriend = await db.collection('friends')
@@ -1466,20 +1530,33 @@
                     return;
                 }
 
+                // 既存のリクエストをチェック
+                const existingRequest = await db.collection('friendRequests')
+                    .where('fromUserId', '==', currentUser.uid)
+                    .where('toUserId', '==', targetUserId)
+                    .where('status', '==', 'pending')
+                    .get();
+
+                if (!existingRequest.empty) {
+                    showToast('既にリクエストを送信済みです', true);
+                    return;
+                }
+
                 // フレンドリクエストを送信
                 await db.collection('friendRequests').add({
                     fromUserId: currentUser.uid,
                     fromUserName: currentUser.displayName || 'Anonymous',
                     toUserId: targetUserId,
+                    toUserName: targetUserData.displayName || 'Anonymous',
                     status: 'pending',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
                 document.getElementById('friendIdInput').value = '';
-                showToast('フレンドリクエストを送信しました');
+                showToast('フレンドリクエストを送信しました！', false);
             } catch (error) {
                 console.error('Friend request error:', error);
-                showToast('リクエストの送信に失敗しました', true);
+                showToast('リクエストの送信に失敗しました: ' + error.message, true);
             }
         }
 
@@ -1843,9 +1920,9 @@
 
         // 自分のIDをコピー
         function copyMyId() {
-            const shortId = currentUser.uid.substring(0, 8);
+            const shortId = currentUser.uid.substring(0, 8).toUpperCase(); // 大文字に統一
             navigator.clipboard.writeText(shortId);
-            showToast('IDをコピーしました');
+            showToast('ID: ' + shortId + ' をコピーしました');
         }
 
         // 統計情報の更新

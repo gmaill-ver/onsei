@@ -157,20 +157,20 @@
             font-family: monospace;
         }
 
-        .btn-logout {
-            padding: 6px 12px;
-            background: #EF4444;
-            color: white;
+        .btn-logout, .btn-header-icon {
+            padding: 4px 8px;
+            background: none;
+            color: #374151;
             border: none;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 22px;
+            line-height: 1;
             cursor: pointer;
-            font-weight: 500;
             transition: all 0.2s;
         }
 
-        .btn-logout:hover {
-            background: #DC2626;
+        .btn-logout:hover, .btn-header-icon:hover {
+            background: #F3F4F6;
         }
 
         /* メインコンテンツ */
@@ -233,12 +233,12 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #3B82F6, #2563EB);
-            color: white;
+            background: #F3F4F6;
+            color: #374151;
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+            border: 1px solid #E5E7EB;
         }
 
         .stat-number {
@@ -270,11 +270,8 @@
         }
 
         .action-btn:hover {
-            background: #3B82F6;
-            color: white;
-            border-color: #3B82F6;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            background: #F3F4F6;
+            border-color: #D1D5DB;
         }
 
         .action-icon {
@@ -350,19 +347,19 @@
             flex: 1;
         }
 
-        .btn-record {
-            background: #EF4444;
-            color: white;
+        .btn-record, .btn-stop, .btn-save, .btn-play-preview {
+            background: #FFFFFF;
+            color: #374151;
+            border: 1px solid #D1D5DB;
         }
 
-        .btn-record:hover {
-            background: #DC2626;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        .btn-record:hover, .btn-stop:hover, .btn-save:hover, .btn-play-preview:hover {
+            background: #F3F4F6;
         }
 
         .btn-record.recording {
-            background: #DC2626;
+            border-color: #EF4444;
+            color: #EF4444;
             animation: pulse 1.5s infinite;
         }
 
@@ -370,33 +367,6 @@
             0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
             100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        .btn-stop {
-            background: #6B7280;
-            color: white;
-        }
-
-        .btn-stop:hover {
-            background: #4B5563;
-        }
-
-        .btn-save {
-            background: #10B981;
-            color: white;
-        }
-
-        .btn-save:hover {
-            background: #059669;
-        }
-
-        .btn-play-preview {
-            background: #3B82F6;
-            color: white;
-        }
-
-        .btn-play-preview:hover {
-            background: #2563EB;
         }
 
         /* 音声リスト */
@@ -449,27 +419,18 @@
             height: 36px;
             border-radius: 8px;
             border: none;
-            background: #3B82F6;
-            color: white;
+            background: none;
+            color: #374151;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 20px;
         }
 
         .btn-icon:hover {
-            transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-share {
-            background: #10B981;
-        }
-
-        .btn-delete {
-            background: #EF4444;
+            background: #F3F4F6;
         }
 
         /* フレンドセクション */
@@ -497,8 +458,8 @@
 
         .btn-add-friend {
             padding: 10px 20px;
-            background: #3B82F6;
-            color: white;
+            background: #E5E7EB;
+            color: #374151;
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -507,7 +468,26 @@
         }
 
         .btn-add-friend:hover {
-            background: #2563EB;
+            background: #D1D5DB;
+        }
+
+        .btn-icon.btn-save {
+            background: none;
+            border: none;
+        }
+
+        .cat-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #F3F4F6;
+            font-size: 15px;
+        }
+
+        .cat-row .cat-fixed {
+            font-size: 12px;
+            color: #9CA3AF;
         }
 
         .friend-list {
@@ -832,9 +812,9 @@
                 <span>Voice Assistant</span>
             </div>
             <div class="header-user">
-                <span id="userName">Guest</span>
                 <span class="user-id-display" id="userIdDisplay">ID: ----</span>
-                <button class="btn-logout" onclick="signOut()">ログアウト</button>
+                <button class="btn-header-icon" onclick="openSettings()" title="設定">&#x2699;&#xfe0f;</button>
+                <button class="btn-logout" onclick="signOut()" title="ログアウト">&#x1f6aa;</button>
             </div>
         </header>
 
@@ -956,7 +936,7 @@
 
                         <div style="margin-bottom: 24px; padding: 12px; background: #F3F4F6; border-radius: 8px;">
                             <small style="color: #6B7280;">あなたのID: <span id="myUserId" style="font-weight: bold; font-family: monospace;">----</span></small>
-                            <button onclick="copyMyId()" style="margin-left: 10px; padding: 4px 10px; font-size: 12px; background: #3B82F6; color: white; border: none; border-radius: 4px; cursor: pointer;">コピー</button>
+                            <button onclick="copyMyId()" style="margin-left: 10px; padding: 4px 10px; font-size: 12px; background: #E5E7EB; color: #374151; border: none; border-radius: 4px; cursor: pointer;">コピー</button>
                         </div>
 
                         <h4 style="margin-bottom: 12px; color: #374151;">フレンドリスト</h4>
@@ -1023,6 +1003,20 @@
         </div>
     </div>
 
+    <!-- 設定モーダル（カテゴリー管理） -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeSettings()">×</span>
+            <div class="modal-header">&#x2699;&#xfe0f; 設定</div>
+            <div style="font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 8px;">カテゴリー</div>
+            <div id="categoryList"></div>
+            <div class="add-friend-form" style="margin-top: 16px; margin-bottom: 0;">
+                <input type="text" id="newCategoryInput" placeholder="新しいカテゴリー名" maxlength="20">
+                <button class="btn-add-friend" onclick="addCategory()">追加</button>
+            </div>
+        </div>
+    </div>
+
     <!-- トースト通知 -->
     <div class="toast" id="toast"></div>
 
@@ -1069,10 +1063,10 @@
             if (user) {
                 currentUser = user;
                 await initializeUserData();
+                renderCategoryOptions();
                 document.getElementById('loadingScreen').style.display = 'none';
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appContainer').style.display = 'flex';
-                document.getElementById('userName').textContent = user.displayName || 'User';
                 
                 const shortId = user.uid.substring(0, 8).toUpperCase(); // 大文字に統一
                 document.getElementById('userIdDisplay').textContent = `ID: ${shortId}`;
@@ -1111,9 +1105,11 @@
                         uid: currentUser.uid
                     });
                     console.log('New user created with shortId:', shortId);
+                    customCategories = [];
                 } else {
                     // 既存ユーザーでshortIdがない場合は追加
                     const userData = userDoc.data();
+                    customCategories = Array.isArray(userData.customCategories) ? userData.customCategories : [];
                     if (!userData.shortId) {
                         await db.collection('users').doc(currentUser.uid).update({
                             shortId: shortId
@@ -1402,25 +1398,107 @@
                         </div>
                     </div>
                     <div class="voice-actions">
-                        <button class="btn-icon" onclick="playVoice('${voice.id}')">▶</button>
+                        <button class="btn-icon" onclick="playVoice('${voice.id}')" title="再生">&#x25b6;&#xfe0e;</button>
                         <button class="btn-icon btn-share" onclick="openShareModal('${voice.id}')">📤</button>
-                        <button class="btn-icon btn-delete" onclick="deleteVoice('${voice.id}')">🗑</button>
+                        <button class="btn-icon btn-delete" onclick="deleteVoice('${voice.id}')" title="削除">&#x1f5d1;&#xfe0f;</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // カテゴリーラベル
+        // カテゴリー（標準 + ユーザー追加）
+        const BUILTIN_CATEGORIES = [
+            { key: 'health', label: '体調不良' },
+            { key: 'greeting', label: '挨拶' },
+            { key: 'daily', label: '日常会話' },
+            { key: 'request', label: 'お願い' },
+            { key: 'emergency', label: '緊急' },
+            { key: 'other', label: 'その他' }
+        ];
+        let customCategories = [];
+
         function getCategoryLabel(category) {
-            const labels = {
-                health: '体調不良',
-                greeting: '挨拶',
-                daily: '日常会話',
-                request: 'お願い',
-                emergency: '緊急',
-                other: 'その他'
-            };
-            return labels[category] || category;
+            const c = [...BUILTIN_CATEGORIES, ...customCategories].find(x => x.key === category);
+            return c ? c.label : category;
+        }
+
+        function renderCategoryOptions() {
+            const sel = document.getElementById('voice-category');
+            const prev = sel.value;
+            sel.innerHTML = [...BUILTIN_CATEGORIES, ...customCategories]
+                .map(c => `<option value="${c.key}">${escapeHtml(c.label)}</option>`).join('');
+            if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
+        }
+
+        function escapeHtml(t) {
+            const d = document.createElement('div');
+            d.textContent = t;
+            return d.innerHTML;
+        }
+
+        function renderCategoryList() {
+            const el = document.getElementById('categoryList');
+            el.innerHTML = BUILTIN_CATEGORIES.map(c => `
+                <div class="cat-row"><span>${escapeHtml(c.label)}</span><span class="cat-fixed">標準</span></div>
+            `).join('') + customCategories.map(c => `
+                <div class="cat-row"><span>${escapeHtml(c.label)}</span>
+                    <button class="btn-icon" onclick="deleteCategory('${c.key}')" title="削除">&#x1f5d1;&#xfe0f;</button>
+                </div>
+            `).join('');
+        }
+
+        function openSettings() {
+            renderCategoryList();
+            document.getElementById('settingsModal').classList.add('show');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('show');
+        }
+
+        async function saveCustomCategories() {
+            await db.collection('users').doc(currentUser.uid).update({ customCategories });
+        }
+
+        async function addCategory() {
+            const input = document.getElementById('newCategoryInput');
+            const label = input.value.trim();
+            if (!label) return;
+            if ([...BUILTIN_CATEGORIES, ...customCategories].some(c => c.label === label)) {
+                showToast('同じ名前のカテゴリーがあります', true);
+                return;
+            }
+            customCategories.push({ key: 'c_' + Date.now().toString(36), label });
+            try {
+                await saveCustomCategories();
+                input.value = '';
+                renderCategoryList();
+                renderCategoryOptions();
+                showToast('カテゴリーを追加しました');
+            } catch (error) {
+                console.error('Add category error:', error);
+                customCategories.pop();
+                showToast('追加に失敗しました', true);
+            }
+        }
+
+        async function deleteCategory(key) {
+            const target = customCategories.find(c => c.key === key);
+            if (!target) return;
+            if (!confirm(`カテゴリー「${target.label}」を削除しますか？\n（このカテゴリーの録音は残ります）`)) return;
+            const before = customCategories;
+            customCategories = customCategories.filter(c => c.key !== key);
+            try {
+                await saveCustomCategories();
+                renderCategoryList();
+                renderCategoryOptions();
+                displayVoices();
+                showToast('削除しました');
+            } catch (error) {
+                console.error('Delete category error:', error);
+                customCategories = before;
+                showToast('削除に失敗しました', true);
+            }
         }
 
         // 音声再生
@@ -1586,7 +1664,7 @@
                             </div>
                         </div>
                         <div class="friend-actions">
-                            <button class="btn-icon" style="background: #10B981;" onclick="acceptFriendRequest('${doc.id}', '${request.fromUserId}', '${request.fromUserName}')">✓</button>
+                            <button class="btn-icon" onclick="acceptFriendRequest('${doc.id}', '${request.fromUserId}', '${request.fromUserName}')">✓</button>
                             <button class="btn-icon btn-delete" onclick="rejectFriendRequest('${doc.id}')">×</button>
                         </div>
                     </div>
@@ -1683,7 +1761,7 @@
                         </div>
                     </div>
                     <div class="friend-actions">
-                        <button class="btn-icon btn-delete" onclick="removeFriend('${friend.id}', '${friend.friendId}')">削除</button>
+                        <button class="btn-icon btn-delete" onclick="removeFriend('${friend.id}', '${friend.friendId}')" title="削除">&#x1f5d1;&#xfe0f;</button>
                     </div>
                 </div>
             `).join('');
